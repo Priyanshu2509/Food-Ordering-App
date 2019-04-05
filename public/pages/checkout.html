@@ -1,0 +1,62 @@
+<div class="card">
+        <div class="card-header">
+          <h4><strong> Checkout </strong></h4>
+          
+        </div>
+</div>
+<br/>    
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+
+                <form name="myForm" novalidate>
+                        <p>Topic Name:<br>
+                            <input type="text" name="user" ng-model="user" required>
+                    
+                            <span style="color:red" ng-show="myForm.user.$dirty && myForm.user.$invalid">
+                    
+                                <span ng-show="myForm.user.$error.required">Username is required</span>
+                            </span>
+                        </p>
+                        <p>
+                            <input type="submit" ng-disabled="myForm.user.$dirty && myForm.user.$invalid">
+                        </p>
+                </form>
+
+        </div>
+
+        <div class="col-sm-4">
+                <div class="card">
+                        <div class="card-body">
+                        <h4 class="card-title" ><strong>Cart</strong></h4>
+                            <div ng-show = "IsVisible"> <p>Cart is empty</p></div>
+                            <div ng-hide = "IsVisible">
+            
+                                <table ng-repeat="item in cart ">
+                                    <tr>
+                                      <td><span>{{item.qty }} x {{ item.foodName}}: {{item.foodPrice*item.qty | currency: "Rs." }}</span></td>
+                                      <td>
+                                          <div class="card-block" style="margin-left: 10px;"><p>
+                                              <button class="btn btn-success btn-sm" ng-click="addItem(item);">+</button>
+                                              <label>&nbsp{{item.qty}}&nbsp</label>
+                                              <button  class="btn btn-danger btn-sm" ng-click="removeItem(item);">-</button>
+                                            </p></div>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                  <hr>
+                                    <h5>Subtotal: {{ getSubTotalCost() | currency: "Rs." }}</h5>
+                                    <h6><small>GST added: {{ getGST() | currency: "Rs. "}}</small></h6>
+                                    <h6><small>VAT added: {{ getVAT() | currency: "Rs. "}}</small></h6>
+                                    <h5><strong>Total: {{getTotalCost() | currency: "Rs. "}}</strong></h5>
+                                    <a href="#/restaurants/{{city}}/{{restaurant}}/checkout" class="btn btn-secondary btn-sm btn-lg btn-block">Checkout</a>   
+            
+                            </div>     
+                            </div>
+                        </div>
+                </div>
+        </div>
+</div>
+      
+
