@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Q=require('q');
+const Q = require('q');
 
 const config = require('../config/database');
 var restaurantDetails = require('../models/restaurantDetails');
@@ -24,7 +24,7 @@ router.get('/:city', (req, res, next) => {
       });
 
     } else {
-      console.log(restaurants);
+      //console.log(restaurants);
       res.status(200).json({
         success: true,
         restaurants,
@@ -37,77 +37,144 @@ router.get('/:city', (req, res, next) => {
 
 //show foodmenu of restaurant
 router.get('/:city/:restaurantId', (req, res, next) => {
-console.log(req.params.city,req.params.restaurantId);
-const city = req.params.city;
-const restaurantId = req.params.restaurantId;
+  console.log(req.params.city, req.params.restaurantId);
+  const city = req.params.city;
+  const restaurantId = req.params.restaurantId;
+  var data = {};
+  var result = {};
+  //var id=req.params.restaurantId;
 
-category.find({
-    'restaurantId': req.params.restaurantId
-  })
-  .then(function (data_category) {
-    var promises = [];
-    for (var i = 0; i < data_category.length; i++) {
-      var subPromise = subCategory.find({
-        'categoryId': data_category._id
-      }).exec()
-      promises.push(subPromise);
-    }
-    Q.allSettled(promises)
-      .then(function (data_subcategory) {
-        for (var i = 0; i < data_subcategory.length; i++) {
-          var subPromise = foodItems.find({
-            'subCategoryId': data_subcategory._id
-          }).exec()
-          promises.push(subPromise);
-        }
+  restaurantDetails.findOne({
+    '_id': restaurantId
+  }, function (error, restaurant) {
+    if (error) {
+      console.log(error);
+      return res.status(400).json({
+        success: false,
+        msg: 'No restaurant could be found...'
       });
-      Q.all(promises).then(function(restaurants){
-      res.status(200).json({
-        success: true,
-        restaurants,
-        msg: 'fooditems found...'
+
+    } else {
+      console.log(restaurant);
+      data.restaurantInfo = restaurant;
+    }
+  });
+
+  console.log(typeof req.params.restaurantId);
+  console.log("rest:", req.params.restaurantId);
+
+  //var categories = [];
+  category.find({
+      'restaurantId': {
+        $exists: true
+      },
+      'restaurantId': restaurantId
+    }).exec()
+    .then(function (data_category) {
+      var ids = [];
+      data_category.forEach((element) => {
+        ids.push(element._id);
       })
-      .catch(function(error){ 
-        console.log(error.message);
-        res.status(500).json({
-          success: false,
+      //console.log("category:", data_category);
+      //console.log("ids:", ids);
+      data.category = data_category;
+      return subCategory.find({
+        'categoryId': {
+          $exists: true
+        },
+        'categoryId': {
+          $in: ids
+        }
+      }).exec()
+    })
+    .then(function (data_subcategory) {
+      //console.log("subcat",data_subcategory);
+      data.subCategory = data_subcategory;
+      var ids = [];
+      data_subcategory.forEach((element) => {
+        //console.log("element", element); 
+        ids.push(element._id);
+        //console.log(ids); 
+      })
+      return foodItems.find({
+        'subCategoryId': {
+          $exists: true
+        },
+        'subCategoryId': {
+          $in: ids
+        }
+      }).exec()
+
+    }).then(function (foodItems) {
+      data.foodItems = foodItems;
+      console.log(typeof data.category)
+      
+      
+      // console.log(data.category);
+      // console.log(data.foodItems);
+
+      // var menuList =data.category;
+
+      // // mappingFunc1();
+      // // mappingFunc2();
+
+      // // var mappingFunc1 = function () {
+
+      //   for (var i=0;i<menuList.length;i++) {
+
+      //     var x = data.subCategory.filter(function (ele) {
+      //       console.log(x);
+      //       return data.category[i]._id == ele.categoryId;
+      //     });
+
+      //     if (x) {
+      //       menuList[i].subCategory = x;
+      //     }
+      //   }
+      // // }
+      // // console.log("here");
+
+      // //var mappingFunc2 = function () {
+      //   for (var i=0;i<menuList.length;i++) {
+      //     for (var j = 0; j < menuList[i].subCategory.length; j++) {
+
+      //       var x = data.foodItems.filter(function (ele) {
+      //         return menuList[i].subCategory[j]._id == ele.subCategoryId;
+      //       });
+
+      //       if (x) {
+      //         menuList[i].subCategory[j].foodItems = x;
+      //       }
+
+      //     }
+      //   }
+      // }
+      // console.log("MENU......", menuList);
+      // result.menuList=menuList;
+
+      if (data.foodItems.length == 0 || data.subCategory.length == 0 || data.category.length == 0 || data.restaurantInfo) {
+        res.status(200).json({
+          success: true,
+          data,
           msg: 'fooditems NOT found...'
         });
-      });
-     })
+      }
+      res.status(200).json({
+        success: true,
+        data,
+        msg: 'fooditems found...'
+      })
+    })
+    .catch(function (error) {
+      console.log(error.message);
+
+      res.status(500).json({
+        success: false,
+        msg: 'Error at server...'
+      })
+    });
 });
-//console.log(promises);
 
 
-  
-
-  // Q.fcall()
-  //   .then(promisedStep2)
-  //   .then(promisedStep3)
-  //   .then(promisedStep4)
-  //   .then(function (value4) {
-  //     // Do something with value4
-  //   })
-  //   .catch(function (error) {
-  //     // Handle any error from all above steps
-  //   })
-  //   .done();
-
-  //  restaurantDetails.find({'city': req.params.city, 'restaurantName':req.params.restaurant,function(error,restaurant){
-  //   json.restaurant=restaurant;
-  //     category.find({'restaurantId': restaurant._id, function(error, category){
-  //       json.category=category;
-  //         subCategory.find({'categoryId: '})
-  //     })
-  //  }});
-
-
-// var promise = Q.fcall(function () {
-//     return "Fixed value";
-// });
-// promise.then(function (val) {
-//     console.log(val);
-// });
-});
 
 module.exports = router;

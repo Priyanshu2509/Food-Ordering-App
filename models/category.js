@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const config= require('../config/database');
 
 const categorySchema = mongoose.Schema({
     categoryName: {
@@ -11,7 +12,7 @@ const categorySchema = mongoose.Schema({
     }
   });
   
-//   const category=module.exports = mongoose.model('category', categorySchema);
+const category=module.exports = mongoose.model('category', categorySchema);
    
 //   async function func(categoryName, restaurantId) {
       

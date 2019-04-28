@@ -1,62 +1,170 @@
 <div class="card">
-        <div class="card-header">
-          <h4><strong> Checkout </strong></h4>
-          
-        </div>
-</div>
-<br/>    
+  <div class="card-header">
+    <h4><strong> Checkout </strong></h4>
 
+  </div>
+</div>
+<br />
 <div class="container">
-    <div class="row">
-        <div class="col-sm-8">
+  <div class="row">
+    <div class="col-sm-8">
 
-                <form name="myForm" novalidate>
-                        <p>Topic Name:<br>
-                            <input type="text" name="user" ng-model="user" required>
-                    
-                            <span style="color:red" ng-show="myForm.user.$dirty && myForm.user.$invalid">
-                    
-                                <span ng-show="myForm.user.$error.required">Username is required</span>
-                            </span>
-                        </p>
-                        <p>
-                            <input type="submit" ng-disabled="myForm.user.$dirty && myForm.user.$invalid">
-                        </p>
+      <h3><strong>Restaurant: {{restaurantInfo.restaurantName}}</strong></h3>
+      <h4><strong>City: {{restaurantInfo.restaurantCity}}</strong></h4>
+
+      <hr>
+      <div>
+        <h4 class="d-inline-block"><strong>Delivery Address</strong></h4>
+        <button type="button" style="float: right" class="btn btn-success btn-sm" data-toggle="modal"
+          data-target="#exampleModal">
+          Add New Address
+        </button>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"><strong>ADD NEW ADDRESS</strong> </h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Enter new Address here</label>
+                    <input type="text" ng-model="newAddress" class="form-control" id="exampleInputEmail1"
+                      aria-describedby="emailHelp">
+                    <br>
+                    <button type="button" class="btn btn-primary" ng-click="addAddress(newAddress); "
+                      data-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
                 </form>
-
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="col-sm-4">
-                <div class="card">
-                        <div class="card-body">
-                        <h4 class="card-title" ><strong>Cart</strong></h4>
-                            <div ng-show = "IsVisible"> <p>Cart is empty</p></div>
-                            <div ng-hide = "IsVisible">
-            
-                                <table ng-repeat="item in cart ">
-                                    <tr>
-                                      <td><span>{{item.qty }} x {{ item.foodName}}: {{item.foodPrice*item.qty | currency: "Rs." }}</span></td>
-                                      <td>
-                                          <div class="card-block" style="margin-left: 10px;"><p>
-                                              <button class="btn btn-success btn-sm" ng-click="addItem(item);">+</button>
-                                              <label>&nbsp{{item.qty}}&nbsp</label>
-                                              <button  class="btn btn-danger btn-sm" ng-click="removeItem(item);">-</button>
-                                            </p></div>
-                                      </td>
-                                    </tr>
-                                  </table>
-                                  <hr>
-                                    <h5>Subtotal: {{ getSubTotalCost() | currency: "Rs." }}</h5>
-                                    <h6><small>GST added: {{ getGST() | currency: "Rs. "}}</small></h6>
-                                    <h6><small>VAT added: {{ getVAT() | currency: "Rs. "}}</small></h6>
-                                    <h5><strong>Total: {{getTotalCost() | currency: "Rs. "}}</strong></h5>
-                                    <a href="#/restaurants/{{city}}/{{restaurant}}/checkout" class="btn btn-secondary btn-sm btn-lg btn-block">Checkout</a>   
-            
-                            </div>     
-                            </div>
-                        </div>
-                </div>
-        </div>
-</div>
-      
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" ng-repeat="address in userAddress track by $index">
+            <input type="radio" ng-model="addressChosen.value" name="addressChosen" ng-value=address  ng-change="dispVal()"/>
+            <label>{{address}}</label>
+        </li>
+      </ul>
 
+      <div>
+        <h4><strong>Payment</strong></h4>
+        <h5><strong>Pay using: &nbsp;&nbsp;</strong> </h5>
+        <div class="form-check-inline">
+         
+          <label class="form-check-label">
+            <div ng-repeat="i in paymentMode track by $index">
+                <input type="radio" ng-change="changePaymentMode(selected)" ng-model="selectedPaymentMode.value" value="{{i}}"> {{i}} 
+            </div>
+          </label>
+              
+            <!-- <input  type="checkbox" class="form-check-input" value="" required>Credit card
+          </label>
+        </div>
+        <div class="form-check-inline">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" value=""required>Debit Card
+          </label>
+        </div>
+        <div class="form-check-inline disabled">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" value="" required>Paypal
+          </label> -->
+        </div>
+
+        <form><br />
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label >Name on the card</label>
+              <input ng-model="formData.name" type="text" class="form-control" required >
+            </div>
+            <div class="form-group col-md-6">
+              <label >Card number</label>
+              <input ng-model="formData.cardNumber" type="text" class="form-control" required >
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label >Expiration Date</label>
+              <input ng-model="formData.date" style="width:200px" type="text" class="form-control" required >
+            </div>
+            <div class="form-group col-md-8">
+              <label >CVV</label>
+              <input style="width:150px" type="text" class="form-control" required >
+            </div>
+          </div>
+        </form>
+
+        <button type="submit" class="btn btn-primary" ng-click="placeOrder();">Place Order</button>
+        
+        <br/><br/>
+      </div>
+
+    </div>  
+
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title"><strong>Cart</strong></h4>
+          <div ng-show="IsVisible">
+            <p>Cart is empty</p>
+          </div>
+          <div ng-hide="IsVisible">
+
+            <table ng-repeat="item in cart.cartItems track by $index ">
+              <tr>
+                <td width="170px">{{ item.foodName}}</td>
+
+                <td width="100px">
+                  <div>
+                    <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center; padding: 0;
+                                      background-color: transparent; color: green; font-weight: bold;"
+                      ng-click="addItem(item);">+</button>
+                    <label style="font-size:17px;">&nbsp{{item.qty}}&nbsp</label>
+                    <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center;padding: 0;
+                                      background-color: transparent; color: red; font-weight: bold; "
+                      ng-click="removeItem(item);">-</button>
+                  </div>
+
+                </td>
+                <td>{{item.foodPrice*item.qty | currency: "₹" }}</td>
+              </tr>
+            </table>
+            <hr>
+            <table>
+              <tr>
+                <td width="270px">
+                  <h5><strong>Subtotal</strong></h5>
+                </td>
+                <td>
+                  <h6><strong>{{ cart.subTotalCost | currency: "₹" }}</strong></h6>
+                </td>
+              </tr>
+              <tr ng-repeat="(key, value) in cart.taxes">
+                <td width="270px">
+                  <h6><small>{{key}} added:</small></h6>
+                </td>
+                <td>
+                  <small>{{ value | currency: "₹"  }}</small>
+                </td>
+              </tr>
+              <tr>
+                <td width="270px">
+                  <h4><strong>Total</strong></h4>
+                </td>
+                <td>
+                  <h4><strong>{{ cart.totalCost | currency: "₹"}}</strong></h4>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  

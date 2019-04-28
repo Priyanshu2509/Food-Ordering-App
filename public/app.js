@@ -1,8 +1,8 @@
 
-var myApp = angular.module('myApp', ['ngRoute', 'ngResource', 'ui.bootstrap']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngResource', 'ui.bootstrap', 'angular-growl']);
 
 
-myApp.config(function ($routeProvider) {
+myApp.config(function ($routeProvider, growlProvider) {
    
     $routeProvider
     
@@ -27,7 +27,7 @@ myApp.config(function ($routeProvider) {
 
     })
 
-    .when('/restaurants/:currentCity/:currentRestaurant/checkout',{
+    .when('/checkout',{
         templateUrl: 'pages/checkout.html',
         controller: 'checkoutController'
 
@@ -42,6 +42,8 @@ myApp.config(function ($routeProvider) {
         templateUrl: 'pages/signup.html',
         controller: 'signupController'
     })
+
+    //growlProvider.globalTimeToLive(5000);
 
 });
 

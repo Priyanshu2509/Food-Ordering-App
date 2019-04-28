@@ -1,16 +1,20 @@
-HELLO
-<!-- <div class="container-fluid">
+<div class="container-fluid">
   <div class="border" style=" width: 100%; height: 200px; background-color: #FFE63F ">
     <div class="mx-auto">
       <div class="row">
         <div class="col-sm-6">
-          <img class="rounded float-right" src="restaurant_image.jpg" alt="Card image cap" height="200" style="padding:20px; ">
+          <img class="rounded float-right" src="restaurant_image.jpg" alt="Card image cap" height="200"
+            style="padding:20px; ">
         </div>
         <div class="col-sm-6" style="padding:20px;">
           <br />
-          <h4><strong>{{currentRestaurantId}}</strong></h4>
-          <h6>{{currentCity}}</h6><br />
-          <h6><i>{{getDescription()}}</i></h6>
+          <div ng-init="findCurrentRestaurant()">
+
+              <h4><strong>{{currentRestaurant.restaurantName}}</strong></h4>
+              <h6>{{currentRestaurant.restaurantCity}}</h6><br />
+              <h6><i>{{currentRestaurant.restaurantDescription}}</i></h6>
+
+          </div>
         </div>
       </div>
     </div>
@@ -21,168 +25,152 @@ HELLO
 <div class="container fluid">
 
   <div class="container-fluid">
-    
+
     <div class="row">
       <div class="col-sm-3" style="text-align: right">
 
-        <div class="container border-right" style=" column-width: 100px; height: 100vh ">
+        <div class=" border-right" style=" height: 100vh ">
           <br>
-          <form>
-            <div class="form-group">
-              <div class="form-check">
-                <input type="checkbox" ng-model="myCheckbox" ng-change="loadData();">
-                <label class="form-check-label"><strong>Veg Only</strong></label>
+            <form>
+              <div class="form-group">
+                <div class="form-check">
+                  <input type="checkbox" ng-model="myCheckbox" ng-change="loadData(); isVegFilter();">
+                  <label class="form-check-label"><strong>Veg Only</strong></label>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
 
-          <ul class="list-group list-group-flush" ng-repeat="i in menuList">
-            <li class="list-group-item"><button type="button" ng-click="hideShow=(hideShow ? false : true);        getCurrentCategory(i.categoryName)" class="btn" style="font-size : 17px; background-color: transparent; text-align: left;">{{i.categoryName}}
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" ng-repeat="i in menuList">
+              <button type="button"
+                ng-click="hideShow=(hideShow ? false : true);getCurrentCategory(i.categoryName); retrieveItem(i.categoryName, i.subCategory[0].subCategoryName); " class="btn"
+                style="font-size : 17px; background-color: transparent; text-align: left;">{{i.categoryName}}
               </button>
 
               <div ng-repeat="j in i.subCategory" ng-if="hideShow">
 
-                <div ng-show="myCheckbox" ng-if="j.subCategoryType=='veg'">
+                <div ng-show="myCheckbox" ng-if="j.isVeg==true">
 
-                  <button type="button" ng-click="retrieveItem(j.subCategoryName); " class="btn" style="font-size : 15px; background-color: transparent; text-align: left; ">{{j.subCategoryName}}</button>
+                  <button type="button" ng-click="retrieveItem(i.categoryName, j.subCategoryName); " class="btn"
+                    style="font-size : 15px; background-color: transparent; text-align: left; ">{{j.subCategoryName}}</button>
                 </div>
 
                 <div ng-hide="myCheckbox">
-                  <button type="button" ng-click="retrieveItem(j.subCategoryName); " class="btn" style="font-size : 15px; background-color: transparent; text-align: left; ">{{j.subCategoryName}}</button>
+                  <button type="button" ng-click="retrieveItem(i.categoryName, j.subCategoryName); " class="btn"
+                    style="font-size : 15px; background-color: transparent; text-align: left; ">{{j.subCategoryName}}</button>
                 </div>
               </div>
             </li>
           </ul>
         </div>
       </div>
+  
 
-      <div class="col-sm-5">
-       <br>
+    <div class="col-sm-5">
+      <br>
 
-       <form>
-         <label>Search: &nbsp</label>
-         <input type="text" ng-model="selected" typeahead-on-select="addItem($item.obj)" placeholder="enter fooditem here" typeahead="val as val.name for val in arr | filter: $viewValue | limitTo:8" style="padding: 0.2rem 0.2rem; width:50%; font-size: 0.75rem;"/>
-         <span ng-show="selected.length>0">
-           <button type="button" class="btn btn-light btn-sm" ng-click="clearData()" style="font-size:13px; background-color: transparent" >X</button>
-         </span>
-       </form>
-       
-       
+      <form>
+        <label>Search: &nbsp</label>
+        <input type="text" ng-model="selected" typeahead-on-select="addItem($item)"
+          placeholder="enter fooditem here" typeahead="val as val.foodName for val in foodItems | filter: {foodName:$viewValue} | limitTo:8" typeahead-input-formatter="formatInputField(selected)" 
+          style="padding: 0.2rem 0.2rem; width:50%; font-size: 0.75rem;" />
+        <span ng-show="selected.length>0">
+          <button type="button" class="btn btn-light btn-sm" ng-click="clearData()"
+            style="font-size:13px; background-color: transparent">X</button>
+        </span>
+      </form>
 
-        <h4><strong>{{currentCategory}}</strong></h4>
-        <h5 style="color: #303030"><strong>{{currentSubCategory}}</strong></h5>
+ 
 
-        <div ng-show="IsVisibleDiv">
-          <div ng-init="loadData()">
-            <div>
-              <ul class="list-group list-group-flush " ng-repeat="i in foodItemDisplay">
-                <li class="list-group-item">{{i.foodName}}
-                  <button type="button" style="float: right" ng-click="addItem($index,i);" class="btn btn-success btn-sm">Add
-                    Item</button>
-                  {{i.foodPrice|currency: "Rs. "}}</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      <h4><strong>{{currentCategory}}</strong></h4>
+      <h5 style="color: #303030"><strong>{{currentSubCategory}}</strong></h5>
 
-        <ul class="list-group list-group-flush" ng-repeat="category in menuList track by $index">
-          <div ng-repeat="subCategory in category.subCategory track by $index">
-            <div ng-repeat="subCategoryItems in subCategory.subCategoryItems track by $index">
-              <div ng-show="category.categoryName==currentCategory && subCategory.subCategoryName==currentSubCategory">
-                <li class="list-group-item">
-                  {{subCategoryItems.foodName}}
-                  <div ng-show="subCategoryItems.qty==0" style="float: right">
-                    <button type="button" ng-click="addItem(subCategoryItems)" style="font-size:11px;text-align: center; "
-                      class="btn btn-success btn-sm">ADD</button>
-                  </div>
-                  <div ng-show="subCategoryItems.qty>0" style="float: right">
-                    <div class="card-block text-right">
-                      <p>
-                        <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center; padding: 0;
-                        background-color: transparent; color: green; font-weight: bold;"
-                          ng-click="addItem(subCategoryItems)">+</button>
-
-                        <label style="font-size:17px;">&nbsp{{subCategoryItems.qty}}&nbsp</label>
-
-                        <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center;padding: 0;
-                        background-color: transparent; color: red; font-weight: bold; "
-                          ng-click="removeItem(subCategoryItems)">-</button>
-                      </p>
-                    </div>
-                  </div>
-                  <br>
-                  <h6>{{subCategoryItems.foodPrice|currency: "₹"}}</h6>
-                </li>
-              </div>
-            </div>
-          </div>
-        </ul>
-
-      </div>
-
-      <div class="col-sm-4 ">
-        <br>
-        <div class="card">
-          <div class="card-body">
-            <div ng-show="IsVisible">
-              <img class="card-img-top" src="empty_cart.jpg" alt="Card image cap">
-            </div>
-
-            <div ng-hide="IsVisible">
-              <h4 class="card-title"><strong>Cart: </strong></h4>
-
-              <table ng-repeat="item in cart track by $index ">
-                <tr>
-                  <td width="170px">{{ item.foodName}}</td>
-
-                  <td width="100px">
-                    <div>
+      <ul class="list-group list-group-flush" ng-repeat="category in menuList track by $index">
+        <div ng-repeat="subCategory in category.subCategory track by $index">
+          <div ng-repeat="foodItems in subCategory.foodItems track by $index">
+            <div ng-show="category.categoryName==currentCategory && subCategory.subCategoryName==currentSubCategory">
+              <li class="list-group-item">
+                {{foodItems.foodName}}
+                
+                <div ng-show="foodItems.qty==0" style="float: right">
+                  <button type="button" ng-click="addItem(foodItems)" style="font-size:11px;text-align: center; "
+                    class="btn btn-success btn-sm">ADD</button>
+                </div>
+                <div ng-show="foodItems.qty>0" style="float: right">
+                  <div class="card-block text-right">
+                    <p>
                       <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center; padding: 0;
-                    background-color: transparent; color: green; font-weight: bold;"
-                        ng-click="addItem(item);">+</button>
-                      <label style="font-size:17px;">&nbsp{{item.qty}}&nbsp</label>
+                        background-color: transparent; color: green; font-weight: bold;"
+                        ng-click="addItem(foodItems)">+</button>
+
+                      <label style="font-size:17px;">&nbsp{{foodItems.qty}}&nbsp</label>
+
                       <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center;padding: 0;
-                    background-color: transparent; color: red; font-weight: bold; "
-                        ng-click="removeItem(item);">-</button>
-                    </div>
-
-                  </td>
-                  <td>{{item.foodPrice*item.qty | currency: "₹" }}</td>
-                </tr>
-              </table>
-              <hr>
-              <table>
-                <tr>
-                  <td width="270px">
-                    <h6>Subtotal</h6>
-                  </td>
-                  <td>
-                    <h6>{{ getSubTotalCost() | currency: "₹" }}</h6>
-                  </td>
-                </tr>
-                <tr ng-repeat="(key, value) in tax">
-                  <td width="270px">
-                    <h6 style="color: #484848"><small>{{key}} added:</small></h6>
-                  </td>
-                  <td>
-                    <small>{{ value | currency: "₹"  }}</small>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="270px">
-                    <h6><strong>Total</strong></h6>
-                  </td>
-                  <td>
-                    <h6><strong>{{ getTotalCost() | currency: "₹"}}</strong></h6>
-                  </td>
-                </tr>
-              </table>
-
-              <a href="#/restaurants/{{city}}/{{restaurant}}/checkout" class="btn btn-secondary btn-sm btn-lg btn-block">Checkout</a>
-
+                        background-color: transparent; color: red; font-weight: bold; "
+                        ng-click="removeItem(foodItems)">-</button>
+                    </p>
+                  </div>
+                </div>
+                <br>
+                <h6>{{foodItems.foodPrice|currency: "₹"}}</h6>
+              </li>
             </div>
           </div>
         </div>
-      </div>
+      </ul>
 
-    </div> -->
+    </div>
+
+    <div class="col-sm-4 ">
+      <br>
+      <div class="card">
+        <div class="card-body">
+          <div ng-show="IsVisible">
+            <img class="card-img-top" src="empty_cart.jpg" alt="Card image cap">
+          </div>
+
+          <div ng-hide="IsVisible">
+            <h4 class="card-title"><strong>Cart: </strong></h4>
+            
+            <table ng-repeat="item in cart.cartItems track by $index ">
+              <tr>
+                <td width="170px">{{ item.foodName}}</td>
+
+                <td width="100px">
+                  <div>
+                    <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center; padding: 0;
+                    background-color: transparent; color: green; font-weight: bold;"
+                      ng-click="addItem(item);">+</button>
+                    <label style="font-size:17px;">&nbsp{{item.qty}}&nbsp</label>
+                    <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center;padding: 0;
+                    background-color: transparent; color: red; font-weight: bold; "
+                      ng-click="removeItem(item);">-</button>
+                  </div>
+
+                </td>
+                <td>{{item.foodPrice*item.qty | currency: "₹" }}</td>
+              </tr>
+            </table>
+            <hr>
+            <table>
+              <tr>
+                <td width="270px">
+                  <h5><strong>Subtotal</strong></h5>
+                </td>
+                <td>
+                  <h5><strong>{{ cart.subTotalCost | currency: "₹" }}</strong></h5>
+                </td>
+              </tr>
+      
+            </table>
+
+            <a href="#/checkout"
+              class="btn btn-secondary btn-sm btn-lg btn-block">Checkout</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

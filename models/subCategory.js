@@ -15,7 +15,7 @@ const subCategorySchema = mongoose.Schema({
     }
   });
   
-//   const subCategory=module.exports = mongoose.model('subCategory', subCategorySchema);
+const subCategory=module.exports = mongoose.model('subCategory', subCategorySchema);
    
 //   async function func(subCategoryName, isVeg, categoryId) {
       

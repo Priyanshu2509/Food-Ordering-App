@@ -16,10 +16,13 @@ const foodItemsSchema = mongoose.Schema({
     subCategoryId:{
         type: String,
         required: true
+    },
+    qty:{
+      type: Number
     }
 });
   
-//   const foodItems=module.exports = mongoose.model('foodItems', foodItemsSchema);
+const foodItems=module.exports = mongoose.model('foodItems', foodItemsSchema);
    
 //   async function func(foodName, foodPrice, foodTaxes, subCategoryId) {
       

@@ -1,27 +1,30 @@
-<br/>
+<br />
 <section id="cover">
     <div id="cover-caption">
         <div class="container">
             <div class="row justify-content-center">
-                    <div class="info-form">
-                        <form action="" class="form-inlin justify-content-center">
-                            <div class="form-group">
-                                <br/> 
-                                <div class="col text-center">
-                                    <h4><strong>Enter your city</strong></h4><br/>  
-                                </div>
-                                <label class="sr-only">Enter city</label>
-                                <input size="30" class="form-control" list="nameHistory" type="text" 
-                                   ng-model="cityName" required="required" ng-change="changedValue(cityName)" 
-                                   placeholder="Enter city">
-                                <datalist id="nameHistory">
-                                  <option ng-repeat="cityName in cities" value="{{cityName}}"></option>
-                                </datalist>
-                            </div>
+                <div class="info-form">
+                    <form action="" class="form-inlin justify-content-center">
+                        <div class="form-group">
+                            <br />
                             <div class="col text-center">
-                            <a href="#/restaurants/{{cityName}}" style="text-align:center" class="btn btn-primary btn-sm">Search</a></div>
-                        </form>
-                    </div>
+                                <h4><strong>Enter your city</strong></h4><br />
+                            </div>
+                            <label class="sr-only">Enter city</label>
+                            <input size="30" class="form-control" list="nameHistory" type="text" ng-model="cityName"
+                                required="required" ng-change="changedValue(cityName)" placeholder="Enter city">
+                            <datalist id="nameHistory">
+                                <option ng-repeat="cityName in cities" value="{{cityName}}"></option>
+                            </datalist>
+                        </div>
+                        <div class="col text-center">
+                            <!-- <button a href="#/restaurants/{{cityName}}" type="submit" value="Search"
+                                ng-click="validateForm()" class="btn btn-info btn-sm">Search</button> -->
+                            <button type="submit" style="text-align:center" class="btn btn-primary btn-sm" ng-click="validateForm()">Search</button>
+                            <!-- <input type="button" class="btn btn-primary btn-sm" href="#/restaurants/{{cityName}}" ng-disabled="cityName" value="Search"> -->
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
