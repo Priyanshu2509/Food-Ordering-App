@@ -1,5 +1,13 @@
 myApp.controller('homeController', ['$scope', '$routeParams', '$location', '$http', 'growl', 'homeService', function ($scope, $routeParams, $location, $http, growl, homeService) {
 
+    var isToken = (localStorage.getItem('userToken'));
+    console.log(isToken);
+    if(isToken){
+        console.log("hello");
+        $scope.logoutButtonDiv = true;
+    } 
+
+
       //fucntion to set routeparams for selected city
     $scope.changedValue = function (item) {
         console.log(item);
@@ -9,7 +17,7 @@ myApp.controller('homeController', ['$scope', '$routeParams', '$location', '$htt
     }
 
     var obj=homeService.getCity();
-
+    
     obj.then(function(response){
         console.log(response, 'res');
         $scope.cities = response.data.cities;

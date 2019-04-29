@@ -107,52 +107,9 @@ router.get('/:city/:restaurantId', (req, res, next) => {
 
     }).then(function (foodItems) {
       data.foodItems = foodItems;
-      console.log(typeof data.category)
+      //console.log(typeof data.category)
       
-      
-      // console.log(data.category);
-      // console.log(data.foodItems);
-
-      // var menuList =data.category;
-
-      // // mappingFunc1();
-      // // mappingFunc2();
-
-      // // var mappingFunc1 = function () {
-
-      //   for (var i=0;i<menuList.length;i++) {
-
-      //     var x = data.subCategory.filter(function (ele) {
-      //       console.log(x);
-      //       return data.category[i]._id == ele.categoryId;
-      //     });
-
-      //     if (x) {
-      //       menuList[i].subCategory = x;
-      //     }
-      //   }
-      // // }
-      // // console.log("here");
-
-      // //var mappingFunc2 = function () {
-      //   for (var i=0;i<menuList.length;i++) {
-      //     for (var j = 0; j < menuList[i].subCategory.length; j++) {
-
-      //       var x = data.foodItems.filter(function (ele) {
-      //         return menuList[i].subCategory[j]._id == ele.subCategoryId;
-      //       });
-
-      //       if (x) {
-      //         menuList[i].subCategory[j].foodItems = x;
-      //       }
-
-      //     }
-      //   }
-      // }
-      // console.log("MENU......", menuList);
-      // result.menuList=menuList;
-
-      if (data.foodItems.length == 0 || data.subCategory.length == 0 || data.category.length == 0 || data.restaurantInfo) {
+      if (data.foodItems.length == 0 || data.subCategory.length == 0 || data.category.length == 0 || data.restaurantInfo.length==0) {
         res.status(200).json({
           success: true,
           data,
@@ -166,8 +123,7 @@ router.get('/:city/:restaurantId', (req, res, next) => {
       })
     })
     .catch(function (error) {
-      console.log(error.message);
-
+      console.log("ERROR...", error.message);
       res.status(500).json({
         success: false,
         msg: 'Error at server...'

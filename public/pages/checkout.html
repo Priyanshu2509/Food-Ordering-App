@@ -1,11 +1,13 @@
 <div class="card">
   <div class="card-header">
-    <h4><strong> Checkout </strong></h4>
-
+    <div style="text-align:center">
+        <h4><strong> Checkout </strong></h4>
+    </div>
   </div>
 </div>
 <br />
-<div class="container">
+
+<div class="container" >
   <div class="row">
     <div class="col-sm-8">
 
@@ -47,8 +49,8 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item" ng-repeat="address in userAddress track by $index">
-            <input type="radio" ng-model="addressChosen.value" name="addressChosen" ng-value=address  ng-change="dispVal()"/>
-            <label>{{address}}</label>
+          <input type="radio" ng-model="addressChosen.value" name="addressChosen" ng-value=address />
+          <label>{{address}}</label>
         </li>
       </ul>
 
@@ -56,56 +58,45 @@
         <h4><strong>Payment</strong></h4>
         <h5><strong>Pay using: &nbsp;&nbsp;</strong> </h5>
         <div class="form-check-inline">
-         
+
           <label class="form-check-label">
             <div ng-repeat="i in paymentMode track by $index">
-                <input type="radio" ng-change="changePaymentMode(selected)" ng-model="selectedPaymentMode.value" value="{{i}}"> {{i}} 
+              <input type="radio" ng-change="changePaymentMode(selectedPaymentMode.value)" ng-model="selectedPaymentMode.value"
+                value="{{i}}"> {{i}}
             </div>
           </label>
-              
-            <!-- <input  type="checkbox" class="form-check-input" value="" required>Credit card
-          </label>
         </div>
-        <div class="form-check-inline">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" value=""required>Debit Card
-          </label>
-        </div>
-        <div class="form-check-inline disabled">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" value="" required>Paypal
-          </label> -->
-        </div>
-
-        <form><br />
+        <div ng-show="creditDebitForm" >
+          <form><br />
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label >Name on the card</label>
-              <input ng-model="formData.name" type="text" class="form-control" required >
+              <label>Name on the card</label>
+              <input ng-model="formData.name" type="text" class="form-control" required>
             </div>
             <div class="form-group col-md-6">
-              <label >Card number</label>
-              <input ng-model="formData.cardNumber" type="text" class="form-control" required >
+              <label>Card number</label>
+              <input ng-model="formData.cardNumber" type="text" class="form-control" required>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-4">
-              <label >Expiration Date</label>
-              <input ng-model="formData.date" style="width:200px" type="text" class="form-control" required >
+              <label>Expiration Date</label>
+              <input ng-model="formData.date" style="width:200px" type="text" class="form-control" required>
             </div>
             <div class="form-group col-md-8">
-              <label >CVV</label>
-              <input style="width:150px" type="text" class="form-control" required >
+              <label>CVV</label>
+              <input style="width:150px" type="text" class="form-control" required>
             </div>
           </div>
-        </form>
-
+          </form>
+        </div>
+<br/><br/>
         <button type="submit" class="btn btn-primary" ng-click="placeOrder();">Place Order</button>
-        
-        <br/><br/>
+
+        <br /><br />
       </div>
 
-    </div>  
+    </div>
 
     <div class="col-sm-4">
       <div class="card">
@@ -167,4 +158,4 @@
       </div>
     </div>
   </div>
-</div>  
+</div>

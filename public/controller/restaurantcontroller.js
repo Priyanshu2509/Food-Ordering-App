@@ -9,10 +9,7 @@ myApp.controller('restaurantController', ['$scope', '$routeParams', '$http', '$l
         var obj = restaurantService.getRestaurantsByCity($scope.currentCity);
 
         obj.then(function (response) {
-                console.log(response, 'res');
                 $scope.restaurantsList = response.data.restaurants;
-                //localStorage.setItem('restaurantsList',JSON.stringiy(response.data.restaurants));
-                console.log ($scope.restaurantsList);
                 $location.path('/restaurants/' + $scope.currentCity);
             },
             function (error) {
@@ -20,6 +17,6 @@ myApp.controller('restaurantController', ['$scope', '$routeParams', '$http', '$l
                 $location.path('/home');
 
             });
-        }
+    }
 
 ]);

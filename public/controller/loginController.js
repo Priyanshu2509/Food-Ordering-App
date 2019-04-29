@@ -2,6 +2,7 @@ myApp.controller('loginController', ['$scope', '$http', '$location', 'growl', 'l
 
     $scope.user = {};
     var data = [];
+    //$scope.logoutButtonDiv=false;
     $scope.onLoginSubmit = function () {
 
         if (!$scope.user.email && !$scope.user.password) {
@@ -29,7 +30,11 @@ myApp.controller('loginController', ['$scope', '$http', '$location', 'growl', 'l
                 console.log(data);
                 localStorage.clear();
                 localStorage.setItem('userToken', data.token);
+                $scope.logoutButtonDiv=true;
+               
                 $location.path('/home');
+                //  location.reload();
+                
             }, function (error) {
                 console.log(error, 'can not get data.');
                 growl.error("Please enter correct user name and password.", {

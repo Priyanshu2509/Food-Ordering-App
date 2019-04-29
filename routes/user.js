@@ -159,6 +159,7 @@ router.post('/getinfo', (req, res, next) => {
 router.put('/addAddress', (req, res, next) => {
 
   var newAddress = (req.body.newAddress);
+  //var id=(req.body.userId);
   console.log(newAddress);
   if (newAddress === undefined || newAddress.length == 0) {
     return res.status(422).json({
