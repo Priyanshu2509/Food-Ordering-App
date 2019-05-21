@@ -2,7 +2,7 @@ myApp.controller('loginController', ['$scope', '$http', '$location', 'growl', 'l
 
     $scope.user = {};
     var data = [];
-    //$scope.logoutButtonDiv=false;
+    // $scope.logoutButtonDiv=false;
     $scope.onLoginSubmit = function () {
 
         if (!$scope.user.email && !$scope.user.password) {
@@ -30,7 +30,7 @@ myApp.controller('loginController', ['$scope', '$http', '$location', 'growl', 'l
                 console.log(data);
                 localStorage.clear();
                 localStorage.setItem('userToken', data.token);
-                $scope.logoutButtonDiv=true;
+                // $scope.logoutButtonDiv=true;
                
                 $location.path('/home');
                 //  location.reload();

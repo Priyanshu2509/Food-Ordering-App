@@ -186,24 +186,17 @@ router.put('/addAddress', (req, res, next) => {
       console.log("success");
       console.log(addressAdded);
 
-
-
-
-      if (addressAdded != '') {
-
+      if (!err) {
         res.status(200).json({
           message: 'address is added successfully!',
           success: true,
         });
-
       } else {
         res.status(500).json({
           message: 'Error at the server!',
           success: false,
         });
       }
-
-
     });
 });
 

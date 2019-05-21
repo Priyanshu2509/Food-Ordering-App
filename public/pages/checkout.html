@@ -1,13 +1,13 @@
 <div class="card">
   <div class="card-header">
     <div style="text-align:center">
-        <h4><strong> Checkout </strong></h4>
+      <h4><strong> Checkout </strong></h4>
     </div>
   </div>
 </div>
 <br />
 
-<div class="container" >
+<div class="container">
   <div class="row">
     <div class="col-sm-8">
 
@@ -61,37 +61,37 @@
 
           <label class="form-check-label">
             <div ng-repeat="i in paymentMode track by $index">
-              <input type="radio" ng-change="changePaymentMode(selectedPaymentMode.value)" ng-model="selectedPaymentMode.value"
-                value="{{i}}"> {{i}}
+              <input type="radio" ng-change="changePaymentMode(selectedPaymentMode.value)"
+                ng-model="selectedPaymentMode.value" value="{{i}}"> {{i}}
             </div>
           </label>
         </div>
-        <div ng-show="creditDebitForm" >
+        <div ng-show="creditDebitForm">
           <form><br />
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label>Name on the card</label>
-              <input ng-model="formData.name" type="text" class="form-control" required>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Name on the card</label>
+                <input ng-model="formData.name" type="text" class="form-control" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Card number</label>
+                <input ng-model="formData.cardNumber" type="text" class="form-control" required>
+              </div>
             </div>
-            <div class="form-group col-md-6">
-              <label>Card number</label>
-              <input ng-model="formData.cardNumber" type="text" class="form-control" required>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>Expiration Date</label>
+                <input ng-model="formData.date" style="width:200px" type="text" class="form-control" required>
+              </div>
+              <div class="form-group col-md-8">
+                <label>CVV</label>
+                <input ng-model="formData.CVV" style="width:150px" type="text" class="form-control" required>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label>Expiration Date</label>
-              <input ng-model="formData.date" style="width:200px" type="text" class="form-control" required>
-            </div>
-            <div class="form-group col-md-8">
-              <label>CVV</label>
-              <input style="width:150px" type="text" class="form-control" required>
-            </div>
-          </div>
           </form>
         </div>
-<br/><br/>
-        <button type="submit" class="btn btn-primary" ng-click="placeOrder();">Place Order</button>
+        <br /><br />
+        <button type="submit" class="btn btn-primary" ng-click="validateForm();">Place Order</button>
 
         <br /><br />
       </div>

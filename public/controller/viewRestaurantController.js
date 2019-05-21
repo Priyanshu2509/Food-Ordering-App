@@ -1,4 +1,4 @@
-myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams', '$location', 'growl', 'viewRestaurantService', 'checkoutService', function ($scope, $http, $routeParams, $location, growl, viewRestaurantService, checkoutService) {
+myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams', '$location', 'growl', 'viewRestaurantService', 'checkoutService', 'restaurantInfoAndMenu', function ($scope, $http, $routeParams, $location, growl, viewRestaurantService, checkoutService, restaurantInfoAndMenu) {
 
         ;
         (function (global) {
@@ -8,15 +8,12 @@ myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams',
             console.log(currentRestaurantId);
             console.log(currentCity);
 
-            // viewRestaurantService.setCurrentRestaurantId(currentRestaurantId);
-            // viewRestaurantService.setCurrentCity(currentCity);
-
             $scope.menuList = null;
             $scope.currentCategory = null;
             $scope.currentSubCategory = null;
             $scope.foodItemDisplay = null;
 
-            $scope.IsVisible = true; //cart
+            // $scope.IsVisible = true; //cart
 
             $scope.IsVisibleDiv = false; //init
 
@@ -25,56 +22,70 @@ myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams',
             $scope.tax = {};
             var taxTotal = 0;
 
-            var cartObj = {
-                cartItems: [],
-                subTotalCost: 0,
-                totalCost: 0,
-                taxes: {}
-            };
-            localStorage.setItem('cart', JSON.stringify(cartObj));
+            $scope.cart = JSON.parse(localStorage.getItem('cart'));
 
-            
-                    
-            var obj = viewRestaurantService.getAllInfo(currentCity, currentRestaurantId);
-            $scope.cart=JSON.parse(localStorage.getItem('cart'));
+            if ($scope.cart == null) {
+                var cartObj = {
+                    cartItems: [],
+                    subTotalCost: 0,
+                    totalCost: 0,
+                    taxes: {}
+                };
+                localStorage.setItem('cart', JSON.stringify(cartObj));
+            }
+            else{
+                $scope.cart = JSON.parse(localStorage.getItem('cart'));  
+                $scope.IsVisible=true;
+            }
 
-            obj.then(function (response) {
-                
+
+
+            console.log($scope.cart);
+            // if($scope.cart.cartItems.length == 0){
+            //     console.log($scope.IsVisible);
+            //     $scope.IsVisible = true;
+            // }
+            // else{
+            //     $scope.IsVisible = false;
+            // }
+            if (restaurantInfoAndMenu) {
                 var cartLocal = JSON.parse(localStorage.getItem('cart'));
-                if (cartLocal !== null) {
+                console.log(cartLocal);
+
+                if (cartLocal == null) {
                     $scope.cart = cartLocal;
                     $scope.IsVisible = false;
-                   
-                } else {
-                    $scope.cart = {};
-                    $scope.cart['cartItems'] = $scope.cart['cartItems'];
-                    $scope.cart.subTotalCost = 0;
-                    $scope.cart.totalCost = 0;
-                    $scope.cart.taxes = {};
-                    localStorage.setItem('cart', JSON.stringify($scope.cart));
-                }
-                
-                    console.log(response);
-                    $scope.currentRestaurant = response.restaurantInfo;
-                    localStorage.setItem('restaurantInfo', JSON.stringify($scope.currentRestaurant));
-                    console.log($scope.currentRestaurant)
-                    $scope.menuList = response.menuList;
-                    $scope.subCategory=response.subCategory;
-                    $scope.foodItems=response.foodItems;
-                    $scope.loadData();
-                 
-                
 
-            }, function (error) {
+                } else {
+                    $scope.cart = JSON.parse(localStorage.getItem('cart'));
+                    $scope.IsVisible = true;
+                    // $scope.cart = {};
+                    // $scope.cart['cartItems'] = $scope.cart['cartItems'];
+                    // $scope.cart.subTotalCost = 0;
+                    // $scope.cart.totalCost = 0;
+                    // $scope.cart.taxes = {};
+                    localStorage.setItem('cart', JSON.stringify($scope.cart));
+
+                }
+
+                var infoResponse = restaurantInfoAndMenu;
+                $scope.currentRestaurant = infoResponse.restaurantInfo;
+                localStorage.setItem('restaurantInfo', JSON.stringify($scope.currentRestaurant));
+                console.log($scope.currentRestaurant)
+                $scope.menuList = infoResponse.menuList;
+                $scope.subCategory = infoResponse.subCategory;
+                $scope.foodItems = infoResponse.foodItems;
+                //   $scope.loadData();
+
+            } else {
                 console.log(error, 'can not get data.');
                 growl.error("Error while displaying restaurants");
                 $location.path('/restaurants/' + currentCity);
 
-            });
+            }
 
             $scope.getCurrentCategory = function (categoryName) {
                 $scope.currentCategory = categoryName;
-
             }
 
             $scope.getCurrentSubCategory = function (subCategoryName) {
@@ -129,10 +140,26 @@ myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams',
                 }
             }
 
+            $scope.getQuantity = function (fooditem) {
+                var cart = JSON.parse(localStorage.getItem('cart'));
+
+                var o = cart.cartItems.find(function (el) {
+                    if (el._id == fooditem._id)
+                        return el;
+                });
+                // console.log(o);
+                if (o) {
+                    return o.qty;
+                } else {
+                    return 0;
+
+                }
+            }
+
             $scope.addItem = function (itemToAdd) {
                 $scope.IsVisible = false;
                 viewRestaurantService.addItem(itemToAdd);
-                 $scope.cart = JSON.parse(localStorage.getItem('cart'));
+                $scope.cart = JSON.parse(localStorage.getItem('cart'));
                 // console.log($scope.cart);
 
             }
@@ -141,12 +168,12 @@ myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams',
                 // $scope.IsVisible = false;
                 viewRestaurantService.removeItem(itemToRemove);
                 $scope.cart = JSON.parse(localStorage.getItem('cart'));
-                if ( $scope.cart.cartItems.length == 0) {
+                if ($scope.cart.cartItems.length == 0) {
                     $scope.IsVisible = true;
                 }
-                console.log($scope.cart);
+                // console.log($scope.cart);
 
-            }   
+            }
 
         }(window));
     }

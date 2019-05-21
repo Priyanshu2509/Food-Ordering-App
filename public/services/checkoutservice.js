@@ -1,37 +1,30 @@
 myApp.service('checkoutService', ['$http', 'growl', '$location', '$q', function ($http, growl, $location, $q) {
 
-    this.getUserInfo = function (token) {
-        var promise = $q.defer();
+    // this.getUserInfo = function (token) {
+    //     var promise = $q.defer();
 
-        console.log(token);
-        $http({
-                method: "POST",
-                url: "http://localhost:3000/users/getinfo",
-                data: {
-                    token: token
-                }
-            })
-            .then(function (response) {
-                promise.resolve(response);
-            }, function (error) {
-                promise.reject(error);
-            });
+    //     console.log(token);
+    //     $http({
+    //             method: "POST",
+    //             url: "http://localhost:3000/users/getinfo",
+    //             data: {
+    //                 token: token
+    //             }
+    //         })
+    //         .then(function (response) {
+    //             promise.resolve(response);
+    //         }, function (error) {
+    //             promise.reject(error);
+    //         });
 
 
-        return promise.promise;
-    }
+    //     return promise.promise;
+    // }
 
 
     this.addAddress = function (newAddress, id) {
-        var promise = $q.defer();
-        console.log("HRLLO");
-        console.log(newAddress);
-        console.log(id);
-        // this.getUserInfo();
+        var promise = $q.defer();    
 
-        if (!newAddress) {
-            alert("Address cannot be empty");
-        } else {
             $http({
                     method: "PUT",
                     url: "http://localhost:3000/users/addAddress",
@@ -46,15 +39,14 @@ myApp.service('checkoutService', ['$http', 'growl', '$location', '$q', function 
                 }, function (error) {
                     promise.reject(error);
                 });
-        }
 
         return promise.promise;
     }
 
-    this.placeorder = function (data) {
+    this.placeOrder = function (data) {
         var promise = $q.defer();
 
-        if ($scope.addressChosen.value) {
+        if (data.deliveryAddress) {
             $http({
                     method: "POST",
                     url: "http://localhost:3000/orderDetails",
@@ -72,8 +64,6 @@ myApp.service('checkoutService', ['$http', 'growl', '$location', '$q', function 
                 ttl: 3000
             });
         }
-
-
         return promise.promise;
     }
 

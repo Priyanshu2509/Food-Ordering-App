@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-6" style="padding:20px;">
           <br />
-          <div ng-init="findCurrentRestaurant()">
+          <div ng-init="findCurrentRestaurant(); loadData();">
 
               <h4><strong>{{currentRestaurant.restaurantName}}</strong></h4>
               <h6>{{currentRestaurant.restaurantCity}}</h6><br />
@@ -34,7 +34,7 @@
             <form>
               <div class="form-group">
                 <div class="form-check">
-                  <input type="checkbox" ng-model="myCheckbox" ng-change="loadData(); isVegFilter();">
+                  <input type="checkbox" ng-model="myCheckbox" ng-change="isVegFilter(); ">
                   <label class="form-check-label"><strong>Veg Only</strong></label>
                 </div>
               </div>
@@ -87,32 +87,32 @@
 
       <ul class="list-group list-group-flush" ng-repeat="category in menuList track by $index">
         <div ng-repeat="subCategory in category.subCategory track by $index">
-          <div ng-repeat="foodItems in subCategory.foodItems track by $index">
+          <div ng-repeat="foodItem in subCategory.foodItems track by $index">
             <div ng-show="category.categoryName==currentCategory && subCategory.subCategoryName==currentSubCategory">
               <li class="list-group-item">
-                {{foodItems.foodName}}
+                {{foodItem.foodName}}
                 
-                <div ng-show="foodItems.qty==0" style="float: right">
-                  <button type="button" ng-click="addItem(foodItems)" style="font-size:11px;text-align: center; "
+                <div ng-show="getQuantity(foodItem)==0" style="float: right">
+                  <button type="button" ng-click="addItem(foodItem)" style="font-size:11px;text-align: center; "
                     class="btn btn-success btn-sm">ADD</button>
                 </div>
-                <div ng-show="foodItems.qty>0" style="float: right">
+                <div ng-show="getQuantity(foodItem)!=0" style="float: right">
                   <div class="card-block text-right">
                     <p>
                       <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center; padding: 0;
                         background-color: transparent; color: green; font-weight: bold;"
-                        ng-click="addItem(foodItems)">+</button>
+                        ng-click="addItem(foodItem)">+</button>
 
-                      <label style="font-size:17px;">&nbsp{{foodItems.qty}}&nbsp</label>
+                      <label style="font-size:17px;">&nbsp{{getQuantity(foodItem)}}&nbsp</label>
 
                       <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center;padding: 0;
                         background-color: transparent; color: red; font-weight: bold; "
-                        ng-click="removeItem(foodItems)">-</button>
+                        ng-click="removeItem(foodItem)">-</button>
                     </p>
                   </div>
                 </div>
                 <br>
-                <h6>{{foodItems.foodPrice|currency: "₹"}}</h6>
+                <h6>{{foodItem.foodPrice|currency: "₹"}}</h6>
               </li>
             </div>
           </div>
@@ -134,7 +134,7 @@
             
             <table ng-repeat="item in cart.cartItems track by $index ">
               <tr>
-                <td width="170px">{{ item.foodName}}</td>
+                <td width="170px">{{item.foodName}}</td>
 
                 <td width="100px">
                   <div>

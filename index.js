@@ -7,7 +7,6 @@
     const bodyParser = require('body-parser');
     const bcrypt   = require('bcryptjs');
 
-
     const express = require('express');
     const app = express();
 
@@ -15,7 +14,7 @@
     const users=require ('./routes/user');
     const home=require('./routes/home');
     const allrestaurants=require('./routes/allrestaurants');
-   // const getRestaurant=require('./routes/getRestaurant');
+    //const getRestaurant=require('./routes/getRestaurant');
     const orderDetails=require('./routes/orderDetails');
     require('./config/passport')(passport);
 
