@@ -1,4 +1,4 @@
-myApp.controller('signupController', ['$scope', '$http','$location', function($scope, $http, $location, appService){ 
+myApp.controller('signupController', ['$scope', '$http','$state', function($scope, $http, $state){ 
     //console.log($location)
     $scope.user = {};
     $scope.onSignupSubmit = function () {
@@ -13,10 +13,11 @@ myApp.controller('signupController', ['$scope', '$http','$location', function($s
             console.log(response, 'res');
             data = response.data;
             console.log(data);
-            $location.path('/pages/home');
+            $state.go('home');
         },function (error){
             console.log(error, 'can not get data.');
-            $location.path('/pages/login');
+            $state.go('login');
+            // $location.path('/pages/login');
         });
      
 

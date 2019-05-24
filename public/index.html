@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en-us" ng-app="myApp">
 
 <head>
+
 
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta charset="UTF-8">
@@ -60,7 +61,11 @@
     <script src="./services/restaurantservice.js"></script>
     <script src="./services/checkoutservice.js"></script>
 
-<body ng-app="myApp">
+    <!-- <base href="/"> -->
+
+</head>
+
+<body>
 
     <header>
         <div ng-include="'pages/navbarFile.html'"></div>
@@ -79,7 +84,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
-    
+
 </body>
 
 </html>

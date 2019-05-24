@@ -1,9 +1,10 @@
-myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams', '$location', 'growl', 'viewRestaurantService', 'checkoutService', 'restaurantInfoAndMenu', function ($scope, $http, $routeParams, $location, growl, viewRestaurantService, checkoutService, restaurantInfoAndMenu) {
+myApp.controller('viewRestaurantController', ['$scope', 'growl', '$state', '$stateParams' ,  'viewRestaurantService', 'restaurantInfoAndMenu', function ($scope, growl, $state, $stateParams,  viewRestaurantService, restaurantInfoAndMenu) {
 
         ;
         (function (global) {
-            var currentRestaurantId = $routeParams.currentRestaurantId;
-            var currentCity = $routeParams.currentCity;
+            
+            var currentRestaurantId = $stateParams.currentRestaurantId;
+            var currentCity = $stateParams.currentCity;
 
             console.log(currentRestaurantId);
             console.log(currentCity);
@@ -13,7 +14,7 @@ myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams',
             $scope.currentSubCategory = null;
             $scope.foodItemDisplay = null;
 
-            // $scope.IsVisible = true; //cart
+            //  $scope.IsVisible = true; //cart
 
             $scope.IsVisibleDiv = false; //init
 
@@ -24,7 +25,9 @@ myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams',
 
             $scope.cart = JSON.parse(localStorage.getItem('cart'));
 
-            if ($scope.cart == null) {
+            if (($scope.cart == null) || ($scope.cart.cartItems.length == 0)) {
+                console.log("Null cart...create a cart!");
+                $scope.IsVisible=true;
                 var cartObj = {
                     cartItems: [],
                     subTotalCost: 0,
@@ -34,36 +37,26 @@ myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams',
                 localStorage.setItem('cart', JSON.stringify(cartObj));
             }
             else{
-                $scope.cart = JSON.parse(localStorage.getItem('cart'));  
-                $scope.IsVisible=true;
+                console.log("Cart already present")
+                // $scope.cart = JSON.parse(localStorage.getItem('cart'));  
+                $scope.IsVisible=false;
             }
 
 
 
             console.log($scope.cart);
-            // if($scope.cart.cartItems.length == 0){
-            //     console.log($scope.IsVisible);
-            //     $scope.IsVisible = true;
-            // }
-            // else{
-            //     $scope.IsVisible = false;
-            // }
+
             if (restaurantInfoAndMenu) {
                 var cartLocal = JSON.parse(localStorage.getItem('cart'));
                 console.log(cartLocal);
 
                 if (cartLocal == null) {
                     $scope.cart = cartLocal;
-                    $scope.IsVisible = false;
+                    // $scope.IsVisible = false;
 
                 } else {
                     $scope.cart = JSON.parse(localStorage.getItem('cart'));
-                    $scope.IsVisible = true;
-                    // $scope.cart = {};
-                    // $scope.cart['cartItems'] = $scope.cart['cartItems'];
-                    // $scope.cart.subTotalCost = 0;
-                    // $scope.cart.totalCost = 0;
-                    // $scope.cart.taxes = {};
+              
                     localStorage.setItem('cart', JSON.stringify($scope.cart));
 
                 }
@@ -80,7 +73,8 @@ myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams',
             } else {
                 console.log(error, 'can not get data.');
                 growl.error("Error while displaying restaurants");
-                $location.path('/restaurants/' + currentCity);
+                $state.go('allrestaurants', { currentCity : currentCity});
+                // $location.path('/restaurants/' + currentCity);
 
             }
 
@@ -170,6 +164,7 @@ myApp.controller('viewRestaurantController', ['$scope', '$http', '$routeParams',
                 $scope.cart = JSON.parse(localStorage.getItem('cart'));
                 if ($scope.cart.cartItems.length == 0) {
                     $scope.IsVisible = true;
+                    localStorage.removeItem(cart);
                 }
                 // console.log($scope.cart);
 

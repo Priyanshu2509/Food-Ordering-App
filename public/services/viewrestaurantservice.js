@@ -29,83 +29,12 @@ myApp.service('viewRestaurantService', ['$http', 'growl', '$location', '$q', fun
         this.restaurantsList = [];
 
         var temp = {};
+        var obj;
         this.taxTotal = 0;
         this.cart = JSON.parse(localStorage.getItem('cart'));
 
-
-        // this.getAllInfo = function (currentCity, currentRestaurantId) {
-
-        //     console.log(currentCity);
-        //     var promise = $q.defer();
-
-        //     $http({
-        //             method: "GET",
-        //             url: "http://localhost:3000/allrestaurants/" + currentCity + '/' + currentRestaurantId,
-        //             data: {
-        //                 city: currentCity,
-        //                 restaurantId: currentRestaurantId
-        //             }
-        //         })
-        //         .then(function (response) {
-        //             //console.log(response);
-        //             var menuRetrieved = (response.data.data);
-        //             var menuList = menuRetrieved.category;
-        //             var subCategory = menuRetrieved.subCategory;
-        //             var foodItems = menuRetrieved.foodItems;
-
-        //             //mapping1
-        //             for (var i in menuList) {
-
-        //                 var x = subCategory.filter(function (ele) {
-        //                     return menuList[i]._id == ele.categoryId;
-        //                 });
-
-        //                 if (x) {
-        //                     menuList[i].subCategory = x;
-        //                 }
-        //             }
-
-        //             //mapping2
-        //             for (var i in menuList) {
-        //                 for (var j = 0; j < menuList[i].subCategory.length; j++) {
-
-        //                     var x = foodItems.filter(function (ele) {
-        //                         return menuList[i].subCategory[j]._id == ele.subCategoryId;
-        //                     });
-
-        //                     if (x) {
-        //                         menuList[i].subCategory[j].foodItems = x;
-        //                     }
-
-        //                 }
-
-        //             }
-
-        //             var result = {};
-        //             result.restaurantInfo = response.data.data.restaurantInfo;
-        //             result.menuList = menuList;
-        //             result.subCategory = subCategory;
-        //             result.foodItems = foodItems;
-        //             console.log(result);
-
-        //             promise.resolve(result);
-
-
-        //         }, function (error) {
-        //             promise.reject(error);
-
-        //         });
-
-        //     return promise.promise;
-
-        // }
-
-
-
-
-
-        this.addItem = function (item) {
-            var itemToAdd = angular.copy(item);
+        this.addItem = function (itemToAdd) {
+            // var itemToAdd = angular.copy(item);
 
             this.cart = JSON.parse(localStorage.getItem('cart'));
             if (this.cart == null) {
@@ -133,7 +62,6 @@ myApp.service('viewRestaurantService', ['$http', 'growl', '$location', '$q', fun
                 this.cart['cartItems'].push(itemToAdd);
             }
 
-
             for (var i = 0; i < itemToAdd.foodTaxes.length; i++) {
                 obj = itemToAdd.foodTaxes[i];
 
@@ -142,25 +70,28 @@ myApp.service('viewRestaurantService', ['$http', 'growl', '$location', '$q', fun
                 } else {
                     // console.log("hello");
 
-                    temp[obj.taxName] += ((obj.taxValue / 100) * itemToAdd.foodPrice * itemToAdd.qty);
+                    temp[obj.taxName] += ((obj.taxValue / 100) * itemToAdd.foodPrice) * itemToAdd.qty;
 
                 }
+                console.log(temp);
 
                 taxTotal = taxTotal + ((obj.taxValue / 100) * itemToAdd.foodPrice);
             }
-
+            console.log("HELLO");
+            console.log(temp);
             this.cart.taxes = temp;
+
             console.log(taxTotal);
             this.cart.subTotalCost = this.cart.subTotalCost + itemToAdd.foodPrice;
             this.cart.totalCost = this.cart.subTotalCost + taxTotal;
-            // this.updateCart(this.cart);
+            this.updateCart(this.cart);
             localStorage.setItem('cart', JSON.stringify(this.cart));
         }
 
 
         //remove item from cart
-        this.removeItem = function (item) {
-            var itemToRemove = angular.copy(item);
+        this.removeItem = function (itemToRemove) {
+            // var itemToRemove = angular.copy(item);
             this.cart = JSON.parse(localStorage.getItem('cart'));
             for (var j = 0; j < this.cart.cartItems.length; j++) {
                 if (this.cart.cartItems[j]._id == itemToRemove._id) {
@@ -173,40 +104,38 @@ myApp.service('viewRestaurantService', ['$http', 'growl', '$location', '$q', fun
 
                     console.log(itemToRemove.qty);
 
+
                     for (var i = 0; i < itemToRemove.foodTaxes.length; i++) {
                         obj = itemToRemove.foodTaxes[i];
 
-                        // if (!temp[obj.taxName]) {
-                        //     temp[obj.taxName] = ((obj.taxValue / 100) * itemToRemove.foodPrice * itemToRemove.qty);
-                        // } else {
-                        // console.log("hello");
-
+                        console.log(obj.taxValue);
                         temp[obj.taxName] -= ((obj.taxValue / 100) * itemToRemove.foodPrice);
-
-                        // }
 
                         taxTotal = taxTotal - ((obj.taxValue / 100) * itemToRemove.foodPrice);
                     }
 
+                    this.cart.taxes = temp;
+
                     this.cart.subTotalCost = this.cart.subTotalCost - itemToRemove.foodPrice;
                     this.cart.totalCost = this.cart.subTotalCost + taxTotal;
 
-                    // console.log(this.cart.cartItems[j].qty);
+                   
+                }
+                if (this.cart.cartItems.length == 0) {
+                    this.IsVisible = true;
+
+                    this.cart['cartItems'] = [];
+                    this.cart.subTotalCost = 0;
+                    this.cart.totalCost = 0;
+                    this.cart.taxes = {};
                 }
 
+                this.updateCart(this.cart);
+                localStorage.setItem('cart', JSON.stringify(this.cart));
+
             }
 
-            if (this.cart.cartItems.length == 0) {
-                this.IsVisible = true;
 
-                this.cart['cartItems'] = [];
-                this.cart.subTotalCost = 0;
-                this.cart.totalCost = 0;
-                this.cart.taxes = {};
-            }
-
-            this.updateCart(this.cart);
-            localStorage.setItem('cart', JSON.stringify(this.cart));
 
         }
 

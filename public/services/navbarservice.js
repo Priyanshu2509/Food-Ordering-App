@@ -1,4 +1,4 @@
-myApp.service('navbarService', ['$http', 'growl', '$location', '$q', function ($http, growl, $location, $q) {
+myApp.service('navbarService', ['$http', 'growl', '$state', '$q', function ($http, growl, $state, $q) {
 
     var isToken = (localStorage.getItem('userToken'));
     this.logoutButtonDiv = false;
@@ -11,7 +11,8 @@ myApp.service('navbarService', ['$http', 'growl', '$location', '$q', function ($
 
     this.logoutFunction=function(){
         localStorage.clear();
-       $location.path('/login');
+        $state.go('login');
+    //    $location.path('/login');
     }
 
     console.log(this.logoutButtonDiv);

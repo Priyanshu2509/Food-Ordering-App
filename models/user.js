@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean
     },
     address:{
-        type: Array
+        type: Object
     }
   
   });

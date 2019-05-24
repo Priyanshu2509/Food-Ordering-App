@@ -1,4 +1,4 @@
-myApp.controller('homeController', ['$scope', '$routeParams', '$location', '$http', 'growl', 'homeService', 'navbarService', 'allCities', function ($scope, $routeParams, $location, $http, growl, homeService, navbarService, allCities) {
+myApp.controller('homeController', ['$scope',  '$location', '$http', 'growl', '$state', '$stateParams' , 'navbarService', 'allCities', function ($scope, $location, $http, growl, $state, $stateParams,  navbarService, allCities) {
     // location.reload();
     $scope.logoutButtonDiv = navbarService.checkLogoutButton();
     
@@ -31,11 +31,12 @@ myApp.controller('homeController', ['$scope', '$routeParams', '$location', '$htt
             growl.error("Please enter a city name!", {
                 ttl: 3000
             });
-                
         } else {
-            console.log($scope.cityName);
-            $routeParams.currentCity=$scope.cityName;
-            $location.path('/restaurants/' + $scope.cityName);
+                
+            $stateParams.currentCity=$scope.cityName;
+            $state.go('allrestaurants', { currentCity : $scope.cityName});
+            console.log($stateParams.currentCity);
+            // return;
         }
     }
 

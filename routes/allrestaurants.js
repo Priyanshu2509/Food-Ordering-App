@@ -37,6 +37,7 @@ router.get('/:city', (req, res, next) => {
 
 //show foodmenu of restaurant
 router.get('/:city/:restaurantId', (req, res, next) => {
+  console.log("API HIT......")
   console.log(req.params.city, req.params.restaurantId);
   const city = req.params.city;
   const restaurantId = req.params.restaurantId;

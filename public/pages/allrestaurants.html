@@ -14,7 +14,7 @@
             <div class="card-body">
               <h5 class="card-title" ><strong>{{i.restaurantName}}</strong></h5>
               <p class="card-text">{{i.restaurantDescription}}</p>
-              <a ui-sref="#/restaurants/{{currentCity}}/{{i._id}}"  class="btn btn-success btn-sm">View</a>
+              <a ui-sref="viewRestaurant({currentCity: currentCity, currentRestaurantId: i._id})" class="btn btn-success btn-sm">View</a>
             </div>
           </div>
          </div>

@@ -1,4 +1,4 @@
-myApp.controller('checkoutController', ['$scope', '$routeParams', '$http', '$location', 'growl', 'checkoutService', 'viewRestaurantService', 'getUserInfo', function ($scope, $routeParams, $http, $location, growl, checkoutService, viewRestaurantService, getUserInfo) {
+myApp.controller('checkoutController', ['$scope',  '$http', '$location', 'growl', 'checkoutService', 'viewRestaurantService', 'userInfo', function ($scope, $http, $location, growl, checkoutService, viewRestaurantService, userInfo) {
 
     $scope.currentRestaurant = JSON.parse(localStorage.getItem('restaurantInfo'));
     $scope.cart = JSON.parse(localStorage.getItem('cart'));
@@ -14,9 +14,6 @@ myApp.controller('checkoutController', ['$scope', '$routeParams', '$http', '$loc
     $scope.creditDebitForm = true;
     var paymentMethod = null;
 
-    // var arr=['Credit Card', 'Debit Card', 'Cash on Delivery'];
-    // localStorage.setItem('paymentMode', JSON.stringify(arr));
-
     $scope.paymentMode = ['Credit Card', 'Debit Card', 'Cash on Delivery'];
     console.log($scope.paymentMode);
     // window.onload= getUserInfo();
@@ -26,33 +23,8 @@ myApp.controller('checkoutController', ['$scope', '$routeParams', '$http', '$loc
     };
 
     var decodedData = null;
-    // var newAddress = null;
 
-    //token decoding  
-    // $scope.getUserInfo = checkoutService.getUserInfo(token);
-
-    // $scope.getUserInfo.then(function (response) {
-
-    //     if (response.data.data) {
-    //         console.log(response.data.data.address);
-    //         decodedData = response.data.data;
-    //         console.log(decodedData);
-    //         if (decodedData.length == 0) {
-    //             growl.info("Please enter a delivery address!", {
-    //                 ttl: 3000
-    //             });
-    //         }
-    //         $scope.userAddress = decodedData.address;
-    //         console.log($scope.userAddress);
-    //     }
-
-    // }, function (error) {
-    //     console.log(error, 'can not get data.');
-
-    // });
-    // console.log(decodedData);
-
-    var decodedData = getUserInfo;
+    var decodedData = userInfo;
     $scope.userAddress = decodedData.address;
 
     $scope.addItem = function (itemToAdd) {
@@ -73,20 +45,38 @@ myApp.controller('checkoutController', ['$scope', '$routeParams', '$http', '$loc
         }
     }
     // checkoutService.getUserInfo(token);
-
+    $scope.newAddress={};
+    // var newAddress={};
     $scope.addAddress = function (newAddress) {
-        if (!newAddress) {
-            growl.error("Address cannot be empty string.",{ttl:3000});
+        console.log(newAddress);
+        if (!$scope.newAddress.locality) {
+            growl.error("localityy cannot be empty.",{ttl:3000});
             return;
         }
+        if (!$scope.newAddress.city) {
+            growl.error("city cannot be empty.",{ttl:3000});
+            return;
+        }
+        if (!$scope.newAddress.pincode) {
+            // console.log(pincode.length)
+            growl.error("pincode cannot be empty.",{ttl:3000});
+            return;
+        }
+        // newAddress.locality=locality;
+        // newAddress.city=city;
+        // newAddress.pincode=pincode;
+        
         console.log(decodedData);
         var obj = checkoutService.addAddress(newAddress, decodedData._id);
 
         obj.then(function (response) {
             console.log(response);
-            var decodedData = getUserInfo;
+            // var decodedData = getUserInfo;
+            
             $scope.userAddress.push(newAddress);
-            $scope.newAddress = null;
+            $scope.newAddress=null;
+            // newAddress.locality=newAddress.city =newAddress.pincode= null;
+            console.log(newAddress);
             console.log("old", token);
             // getUserInfo();
 
@@ -94,8 +84,6 @@ myApp.controller('checkoutController', ['$scope', '$routeParams', '$http', '$loc
             console.log(error, 'can not get data.');
 
         });
-
-
     }
 
     $scope.validateForm = function () {

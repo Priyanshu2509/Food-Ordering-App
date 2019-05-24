@@ -1,10 +1,9 @@
-myApp.controller('restaurantController', ['$scope', '$routeParams', '$http', '$location', 'restaurantService', 'allRestaurants', function ($scope, $routeParams, $http, $location, restaurantService, allRestaurants) {
+myApp.controller('restaurantController', ['$scope', '$http', '$location', '$state', '$stateParams', 'allRestaurants','restaurantService', function ($scope, $http, $location, $state, $stateParams, allRestaurants, restaurantService) {
+        console.log("Restraunt Controller");
+         $scope.currentCity = $stateParams.currentCity;
 
-        $scope.currentCity = $routeParams.currentCity;
-        console.log($routeParams.currentCity);
-
-        $scope.restaurantsList = allRestaurants;
-        console.log($scope.restaurantsList);
+         $scope.restaurantsList = allRestaurants;
+         console.log($scope.restaurantsList);
      }
 
 ]);

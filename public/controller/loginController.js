@@ -1,4 +1,4 @@
-myApp.controller('loginController', ['$scope', '$http', '$location', 'growl', 'loginService', function ($scope, $http, $location, growl, loginService) {
+myApp.controller('loginController', ['$scope', '$http', '$location', 'growl',  '$state', 'loginService', function ($scope, $http, $location, growl, $state, loginService) {
 
     $scope.user = {};
     var data = [];
@@ -32,7 +32,8 @@ myApp.controller('loginController', ['$scope', '$http', '$location', 'growl', 'l
                 localStorage.setItem('userToken', data.token);
                 // $scope.logoutButtonDiv=true;
                
-                $location.path('/home');
+                // $location.path('/home');
+                $state.go('home');
                 //  location.reload();
                 
             }, function (error) {
@@ -40,7 +41,8 @@ myApp.controller('loginController', ['$scope', '$http', '$location', 'growl', 'l
                 growl.error("Please enter correct user name and password.", {
                     ttl: 3000
                 });
-                $location.path('/login');
+                $state.go('allrestaurants', { currentCity : $scope.cityName});
+                // $location.path('/login');
             });
 
         }
