@@ -35,7 +35,7 @@ myApp.controller('homeController', ['$scope',  '$location', '$http', 'growl', '$
                 
             $stateParams.currentCity=$scope.cityName;
             $state.go('allrestaurants', { currentCity : $scope.cityName});
-            console.log($stateParams.currentCity);
+            // console.log($stateParams.currentCity);
             // return;
         }
     }

@@ -10,7 +10,7 @@ var foodItems = require('../models/foodItems');
 
 //show restaurants 
 router.get('/:city', (req, res, next) => {
-  //console.log("req", req.params.city);
+  console.log("req", req.params.city);
 
   restaurantDetails.find({
     'restaurantCity': req.params.city

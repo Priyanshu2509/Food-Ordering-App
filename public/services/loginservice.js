@@ -5,7 +5,7 @@ myApp.service('loginService', ['$http', 'growl', '$location', '$q', function ($h
 
         $http({
             method: "POST",
-            url: "http://localhost:3000/users/authenticate",
+            url: "http://localhost:3000/api/users/authenticate",
             data: userCredentials
         })
         .then(function (response) {

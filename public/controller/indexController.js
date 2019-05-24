@@ -1,4 +1,4 @@
-myApp.controller('indexController', ['$scope', '$location', 'indexService', function ($scope, $location, indexService) {
+myApp.controller('indexController', ['$scope', '$state', 'indexService', function ($scope, $state, indexService) {
 
     var isToken = (localStorage.getItem('userToken'));
     $scope.logoutButtonDiv = false;
@@ -10,7 +10,8 @@ myApp.controller('indexController', ['$scope', '$location', 'indexService', func
 
     $scope.logoutFunction = function () {
         localStorage.clear();
-        $location.path('/login');
+        $state.go('login');
+        // $location.path('/login');
     }
 
 }]);

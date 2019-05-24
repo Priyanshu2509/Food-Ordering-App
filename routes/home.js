@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const config = require('../config/database');
-
-
 var restaurantDetails= require('../models/restaurantDetails');
 
 //show cities in drop down at homepage

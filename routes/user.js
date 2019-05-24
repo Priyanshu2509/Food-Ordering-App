@@ -46,25 +46,6 @@ router.post('/authenticate', (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  // var emailFilter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
-  // var phoneFilter = /^http:\/\//;
-
-  // if (emailFilter.test(username)) {
-  //   alert('Please enter a valid e-mail address.');
-    
-
-  // } else if (phoneFilter.test(username)) {
-  //   alert('Please correct your phone number.');
-   
-  // }
-
-  // else{
-  //   alert("ERROR");
-  // }
-
-
-
-
   User.getUserByEmail(email, (err, user) => {
     // if (err)
     // console.log ('error', err.message, err.stack);

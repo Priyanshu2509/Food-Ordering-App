@@ -27,7 +27,7 @@ myApp.service('checkoutService', ['$http', 'growl', '$location', '$q', function 
 
             $http({
                     method: "PUT",
-                    url: "http://localhost:3000/users/addAddress",
+                    url: "http://localhost:3000/api/users/addAddress",
                     data: {
                         newAddress: newAddress,
                         userId: id
@@ -49,7 +49,7 @@ myApp.service('checkoutService', ['$http', 'growl', '$location', '$q', function 
         if (data.deliveryAddress) {
             $http({
                     method: "POST",
-                    url: "http://localhost:3000/orderDetails",
+                    url: "http://localhost:3000/api/orderDetails",
                     data: data
                 })
                 .then(function (response) {

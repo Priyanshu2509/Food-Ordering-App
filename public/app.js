@@ -1,10 +1,13 @@
 var myApp = angular.module('myApp', ['ngResource', 'ui.bootstrap', 'ui.router', 'angular-growl']);
 
-myApp.config(function ($stateProvider, $urlRouterProvider, growlProvider) {
+myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, growlProvider) {
 
-    $urlRouterProvider.otherwise('/');
+    // $urlRouterProvider.otherwise('/');
 
     $stateProvider
+        // .state("otherwise", {
+        //     url: '/otherwise'
+        // })
         .state('firstPage', {
             url: '/',
             templateUrl: 'pages/firstPage.html',
@@ -31,7 +34,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, growlProvider) {
                 allCities: ['$http', function ($http) {
                     return $http({
                             method: "GET",
-                            url: "http://localhost:3000/home",
+                            url: "http://localhost:3000/api/home",
                         })
                         .then(function (response) {
                             console.log(response.data.cities);
@@ -51,7 +54,11 @@ myApp.config(function ($stateProvider, $urlRouterProvider, growlProvider) {
                 allRestaurants: ['$http', '$stateParams', function ($http, $stateParams) {
                     return $http({
                             method: "GET",
-                            url: "http://localhost:3000/allrestaurants/" + $stateParams.currentCity
+                            url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity,
+                            data: {
+                                city: $stateParams.currentCity
+                            
+                            }
                         })
                         .then(function (response) {
                             // console.log(response.data.cities);
@@ -71,7 +78,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, growlProvider) {
                 restaurantInfoAndMenu: ['$http', '$stateParams', function ($http, $stateParams) {
                     return $http({
                             method: "GET",
-                            url: "http://localhost:3000/allrestaurants/" + $stateParams.currentCity + '/' + $stateParams.currentRestaurantId,
+                            url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity + '/' + $stateParams.currentRestaurantId,
                             data: {
                                 city: $stateParams.currentRestaurantId,
                                 restaurantId: $stateParams.currentRestaurantId
@@ -136,7 +143,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, growlProvider) {
                     var token = localStorage.getItem('userToken');
                     return $http({
                             method: "POST",
-                            url: "http://localhost:3000/users/getinfo",
+                            url: "http://localhost:3000/api/users/getinfo",
                             data: {
                                 token: token
                             }
@@ -165,10 +172,5 @@ myApp.config(function ($stateProvider, $urlRouterProvider, growlProvider) {
 
         });
 
-    // $locationProvider.html5Mode({
-    //     enabled: true,
-    //     requireBase: false
-    // });
-
-
+    $locationProvider.html5Mode(true);
 });

@@ -5,7 +5,7 @@ myApp.controller('signupController', ['$scope', '$http','$state', function($scop
 
         $http({
             method: "POST",
-            url: "http://localhost:3000/users/signup",
+            url: "http://localhost:3000/api/users/signup",
             data: $scope.user
         })
         .then(function (response) {

@@ -2,7 +2,6 @@ myApp.controller('loginController', ['$scope', '$http', '$location', 'growl',  '
 
     $scope.user = {};
     var data = [];
-    // $scope.logoutButtonDiv=false;
     $scope.onLoginSubmit = function () {
 
         if (!$scope.user.email && !$scope.user.password) {
@@ -41,7 +40,8 @@ myApp.controller('loginController', ['$scope', '$http', '$location', 'growl',  '
                 growl.error("Please enter correct user name and password.", {
                     ttl: 3000
                 });
-                $state.go('allrestaurants', { currentCity : $scope.cityName});
+                $state.go('login');
+                // $state.go('allrestaurants', { currentCity : $scope.cityName});
                 // $location.path('/login');
             });
 
