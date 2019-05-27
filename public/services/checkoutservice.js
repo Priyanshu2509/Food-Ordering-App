@@ -1,26 +1,4 @@
-myApp.service('checkoutService', ['$http', 'growl', '$location', '$q', function ($http, growl, $location, $q) {
-
-    // this.getUserInfo = function (token) {
-    //     var promise = $q.defer();
-
-    //     console.log(token);
-    //     $http({
-    //             method: "POST",
-    //             url: "http://localhost:3000/users/getinfo",
-    //             data: {
-    //                 token: token
-    //             }
-    //         })
-    //         .then(function (response) {
-    //             promise.resolve(response);
-    //         }, function (error) {
-    //             promise.reject(error);
-    //         });
-
-
-    //     return promise.promise;
-    // }
-
+myApp.service('checkoutService', ['$http', 'growl', '$uibModal', '$q', function ($http, growl, $uibModal, $q) {
 
     this.addAddress = function (newAddress, id) {
         var promise = $q.defer();    
@@ -33,7 +11,7 @@ myApp.service('checkoutService', ['$http', 'growl', '$location', '$q', function 
                         userId: id
                     }
                 })
-                .then(function (response) {
+                .then(function (response) {  
                     promise.resolve(response);
 
                 }, function (error) {

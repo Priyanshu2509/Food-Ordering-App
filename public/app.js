@@ -1,13 +1,9 @@
-var myApp = angular.module('myApp', ['ngResource', 'ui.bootstrap', 'ui.router', 'angular-growl']);
+var myApp = angular.module('myApp', ['ngResource', 'ngMessages', 'ngRoute', 'ngSanitize', 'angular-flot','ui.bootstrap', 'ui.router', 'angular-growl']);
 
 myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, growlProvider) {
 
-    // $urlRouterProvider.otherwise('/');
-
+    
     $stateProvider
-        // .state("otherwise", {
-        //     url: '/otherwise'
-        // })
         .state('firstPage', {
             url: '/',
             templateUrl: 'pages/firstPage.html',
@@ -55,10 +51,10 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
                     return $http({
                             method: "GET",
                             url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity,
-                            data: {
-                                city: $stateParams.currentCity
+                            // data: {
+                            //     city: $stateParams.currentCity
                             
-                            }
+                            // }
                         })
                         .then(function (response) {
                             // console.log(response.data.cities);
@@ -78,7 +74,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
                 restaurantInfoAndMenu: ['$http', '$stateParams', function ($http, $stateParams) {
                     return $http({
                             method: "GET",
-                            url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity + '/' + $stateParams.currentRestaurantId,
+                            url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity + '/' + $stateParams.currentRestaurantId ,
                             data: {
                                 city: $stateParams.currentRestaurantId,
                                 restaurantId: $stateParams.currentRestaurantId
@@ -172,5 +168,5 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
 
         });
 
-    $locationProvider.html5Mode(true);
+    // $locationProvider.html5Mode(true);
 });

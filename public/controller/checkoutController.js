@@ -1,8 +1,10 @@
-myApp.controller('checkoutController', ['$scope',  '$http', '$location', 'growl', 'checkoutService', 'viewRestaurantService', 'userInfo', function ($scope, $http, $location, growl, checkoutService, viewRestaurantService, userInfo) {
+myApp.controller('checkoutController', ['$scope', '$uibModal',  'growl', 'checkoutService', 'viewRestaurantService', 'userInfo', function ($scope, $uibModal, growl, checkoutService, viewRestaurantService, userInfo) {
+
+    console.log("Here at checkout controller");
 
     $scope.currentRestaurant = JSON.parse(localStorage.getItem('restaurantInfo'));
     $scope.cart = JSON.parse(localStorage.getItem('cart'));
-
+ 
     var token = localStorage.getItem('userToken');
     $scope.restaurantInfo = JSON.parse(localStorage.getItem('restaurantInfo'));
 
@@ -23,9 +25,14 @@ myApp.controller('checkoutController', ['$scope',  '$http', '$location', 'growl'
     };
 
     var decodedData = null;
+    var currentYear = new Date().getFullYear();
+    console.log(currentYear);
 
     var decodedData = userInfo;
     $scope.userAddress = decodedData.address;
+
+    $scope.checkValidExpiryMonth = false;
+    $scope.checkValidExpiryYear = false;
 
     $scope.addItem = function (itemToAdd) {
         $scope.IsVisible = false;
@@ -36,73 +43,98 @@ myApp.controller('checkoutController', ['$scope',  '$http', '$location', 'growl'
     }
 
     $scope.removeItem = function (itemToRemove) {
-        // $scope.IsVisible = false;
         viewRestaurantService.removeItem(itemToRemove);
         $scope.cart = JSON.parse(localStorage.getItem('cart'));
         if ($scope.cart.cartItems.length == 0) {
             $scope.IsVisible = true;
-            $location.path('/restaurants/' + $scope.currentRestaurant.restaurantCity);
+            $state.go('allrestaurants', { currentCity : $scope.currentRestaurant.restaurantCity});
+            // $location.path('/restaurants/' + $scope.currentRestaurant.restaurantCity);
         }
     }
-    // checkoutService.getUserInfo(token);
-    $scope.newAddress={};
-    // var newAddress={};
+    
+    $scope.newAddress = {};
+
+
+    $scope.openModal = function(){
+        $scope.modalInstance = $uibModal.open({
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: '/pages/modal.html',
+        controller :'ModelHandlerController',
+        scope: $scope,
+		size: 'md',
+		backdrop: 'static',
+		resolve: {
+		 payload: function () {
+			 return {
+				msg_body : 'Hello! I am payload msg',
+				title : 'Hello! Title',
+				body_title : 'UiBootstrap.net'
+             };
+            }
+		 }
+        });
+       
+        }
+    
     $scope.addAddress = function (newAddress) {
         console.log(newAddress);
         if (!$scope.newAddress.locality) {
-            growl.error("localityy cannot be empty.",{ttl:3000});
-            return;
-        }
-        if (!$scope.newAddress.city) {
-            growl.error("city cannot be empty.",{ttl:3000});
-            return;
-        }
-        if (!$scope.newAddress.pincode) {
-            // console.log(pincode.length)
-            growl.error("pincode cannot be empty.",{ttl:3000});
-            return;
-        }
-        // newAddress.locality=locality;
-        // newAddress.city=city;
-        // newAddress.pincode=pincode;
-        
-        console.log(decodedData);
-        var obj = checkoutService.addAddress(newAddress, decodedData._id);
+            $scope.checkValidLocality = true;
+            // document.getElementById("exampleModal").showModal();
+            // exampleModal.modal('show');
+            // return;
 
-        obj.then(function (response) {
-            console.log(response);
-            // var decodedData = getUserInfo;
+        } else if (!$scope.newAddress.city) {
+            $scope.checkValidCity = true;
+            // document.getElementById("exampleModal").showModal();
             
-            $scope.userAddress.push(newAddress);
-            $scope.newAddress=null;
-            // newAddress.locality=newAddress.city =newAddress.pincode= null;
-            console.log(newAddress);
-            console.log("old", token);
-            // getUserInfo();
+        } else if (!$scope.newAddress.pincode) {
+            $scope.checkValidPincode = true;
+            // document.getElementById("exampleModal").showModal();
+            
+        } else {
 
-        }, function (error) {
-            console.log(error, 'can not get data.');
+            console.log(decodedData);
+            var obj = checkoutService.addAddress(newAddress, decodedData._id);
 
-        });
+            obj.then(function (response) {
+                console.log(response);
+
+                $scope.userAddress.push(newAddress);
+                $scope.newAddress = null;
+
+                console.log(newAddress);
+                console.log("old", token);
+
+            }, function (error) {
+                console.log(error, 'can not get data.');
+
+            });
+
+        }
+
     }
 
     $scope.validateForm = function () {
-        console.log($scope.formData);
+        console.log($scope.formData.date);
 
         if (paymentMethod != "Cash on Delivery") {
 
             if ($scope.formData.name == null) {
-                window.alert("Please enter your name...");
+                window.alert("Please enter valid name...");
                 return false;
-            } else if ($scope.formData.cardNumber == null) {
-                window.alert("Please enter your card number...");
+            } else if (isNaN($scope.formData.cardNumber) || $scope.formData.cardNumber == null) {
+                window.alert("Please enter valid card number...");
                 return false;
-            } else if ($scope.formData.date == null) {
-                window.alert("Please enter date...");
+            } else if (isNaN($scope.formData.CVV) || $scope.formData.CVV == null) {
+                window.alert("Please enter valid CVV...");
                 return false;
-            } else if ($scope.formData.CVV == null) {
-                window.alert("Please enter CVV...");
-                return false;
+            } else if (isNaN($scope.formData.date.expiryYear) || $scope.formData.date.expiryYear == null || $scope.formData.date.expiryYear < currentYear) {
+                $scope.checkValidExpiryMonth = true;
+            } else if (isNaN($scope.formData.date.expiryMonth) || $scope.formData.date.expiryMonth < 1 || $scope.formData.date.expiryMonth > 12) {
+                $scope.checkValidExpiryMonth = true;
+
             } else {
                 placeOrder();
 
@@ -152,4 +184,17 @@ myApp.controller('checkoutController', ['$scope',  '$http', '$location', 'growl'
         $scope.formData.paymentMode = paymentMode;
     }
 
+}]);
+
+myApp.controller("ModelHandlerController", ['$scope' , '$uibModalInstance', function($scope,$uibModalInstance){
+ 
+    $scope.cancelModal = function(){
+    console.log("cancelmodal");
+    $uibModalInstance.dismiss('close');
+    }
+    $scope.ok = function(){
+    $uibModalInstance.close('save');
+    
+    }
+    
 }]);

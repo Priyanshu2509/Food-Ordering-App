@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../config/database');
 
-const orderSchema = mongoose.Schema({
+const orderDetailsSchema = mongoose.Schema({
     userId: {
         type: String
     },
@@ -21,16 +21,16 @@ const orderSchema = mongoose.Schema({
         type: String
     },
     deliveryAddress:{
-        type:String
+        type:Object
     },
     paymentDetails:{
         type:Object
     }
 });
 
-const orderDetails = module.exports = mongoose.model('orderDetails', orderSchema);
+const orderDetails = module.exports = mongoose.model('orderDetails', orderDetailsSchema);
 
 module.exports.addOrder = function (newOrder, callback) {
-
+    // console.log("order line 34" , newOrder);
     newOrder.save(callback);
 }

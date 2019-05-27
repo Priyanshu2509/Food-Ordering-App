@@ -28,9 +28,13 @@ myApp.controller('homeController', ['$scope',  '$location', '$http', 'growl', '$
     $scope.validateForm = function () {
         console.log($scope.cityName);
         if (!$scope.cityName) {
-            growl.error("Please enter a city name!", {
-                ttl: 3000
-            });
+            alert('Please enter a city name!');
+
+            // growl.error("Please enter a city name!", {
+            //     ttl: 3000
+            // });
+        // $state.go('home');
+            // return;
         } else {
                 
             $stateParams.currentCity=$scope.cityName;

@@ -1,5 +1,4 @@
 const express = require('express');
-
 const router = express.Router();
 
 const passport = require('passport');
@@ -180,14 +179,5 @@ router.put('/addAddress', (req, res, next) => {
       }
     });
 });
-
-
-
-// Profile route
-router.get('/profile', (req, res, next) => {
-  res.send('PROFILE');
-});
-
-
 
 module.exports = router;
