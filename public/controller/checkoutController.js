@@ -1,4 +1,4 @@
-myApp.controller('checkoutController', ['$scope', '$uibModal',  'growl', 'checkoutService', 'viewRestaurantService', 'userInfo', function ($scope, $uibModal, growl, checkoutService, viewRestaurantService, userInfo) {
+myApp.controller('checkoutController', ['$scope', '$uibModal', '$state',  'growl', 'checkoutService', 'viewRestaurantService', 'userInfo', function ($scope, $uibModal, $state, growl, checkoutService, viewRestaurantService, userInfo) {
 console.log("here at checkout controller");
     $scope.currentRestaurant = JSON.parse(localStorage.getItem('restaurantInfo'));
     $scope.cart = JSON.parse(localStorage.getItem('cart'));
@@ -45,7 +45,8 @@ console.log("here at checkout controller");
         $scope.cart = JSON.parse(localStorage.getItem('cart'));
         if ($scope.cart.cartItems.length == 0) {
             $scope.IsVisible = true;
-            $state.go('allrestaurants', { currentCity : $scope.currentRestaurant.restaurantCity});
+            console.log($scope.currentRestaurant.restaurantCity);
+            $state.go('allrestaurants', {currentCity : $scope.currentRestaurant.restaurantCity});
             // $location.path('/restaurants/' + $scope.currentRestaurant.restaurantCity);
         }
     }
