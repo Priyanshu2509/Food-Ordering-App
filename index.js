@@ -23,8 +23,8 @@
         .catch(function (err) {
             console.log("Cannot connect to mongodb...", err);
         });
-    // app.use(express.static(__dirname + '/public'));
 
+    
     app.use(express.static(path.join(__dirname, 'public')));
 
     app.use(bodyParser.json());
@@ -39,22 +39,14 @@
         cb(null, obj);
     });
 
-
     app.use('/api/users', users);
     app.use('/api/home', home);
     app.use('/api/allrestaurants', allrestaurants);
     app.use('/api/orderDetails', orderDetails);
 
-
-    // app.get('*', function(req, res) {
-    //     res.sendFile(path.join(__dirname + '/public/index.html'));
-    // });
-
     app.use(function(req,res){
         res.sendFile(__dirname+'/public/index.html');
-    })
-    // app.get('/', (req, res) => {
-    //     res.send('Invalid Endpoint');
-    // });
+    });
+
     const port = 3000;
     app.listen(port, () => console.log(`Listening on port ${port}...`));

@@ -1,10 +1,14 @@
-var myApp = angular.module('myApp', ['ngResource', 'ngMessages', 'ngRoute', 'ngSanitize', 'angular-flot','ui.bootstrap', 'ui.router', 'angular-growl']);
+var myApp = angular.module('myApp', ['ngResource', 'ngRoute' , 'ngAnimate' ,  'ngSanitize', 'ui.bootstrap', 'ui.router', 'angular-growl']);
 
 myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, growlProvider) {
 
-    
+    $locationProvider.html5Mode(true);
+
+     $urlRouterProvider.otherwise('/');
+
     $stateProvider
-        .state('firstPage', {
+      
+        .state('/', {
             url: '/',
             templateUrl: 'pages/firstPage.html',
             controller: ''
@@ -168,5 +172,4 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
 
         });
 
-    // $locationProvider.html5Mode(true);
 });

@@ -1,7 +1,5 @@
 myApp.controller('checkoutController', ['$scope', '$uibModal',  'growl', 'checkoutService', 'viewRestaurantService', 'userInfo', function ($scope, $uibModal, growl, checkoutService, viewRestaurantService, userInfo) {
-
-    console.log("Here at checkout controller");
-
+console.log("here at checkout controller");
     $scope.currentRestaurant = JSON.parse(localStorage.getItem('restaurantInfo'));
     $scope.cart = JSON.parse(localStorage.getItem('cart'));
  
@@ -54,67 +52,66 @@ myApp.controller('checkoutController', ['$scope', '$uibModal',  'growl', 'checko
     
     $scope.newAddress = {};
 
+    var modalInstance = '';
+    $scope.openModal = function(task){
+        modalInstance = $uibModal.open({
+            animation: false,
+            templateUrl: 'pages/modal.html',
+            scope: $scope ,
+            controller: function($scope, $uibModalInstance, formData) {
+                $scope.ok = function(newAddress){
+                    // console.log(newAddress);
+                    // function addAddress(newAddress){
+                        console.log(newAddress);
+                        if (!$scope.newAddress.locality) {
+                            $scope.checkValidLocality = true;
+                
+                        } else if (!$scope.newAddress.city) {
+                            $scope.checkValidCity = true;
+                            
+                        } else if (!$scope.newAddress.pincode) {
+                            $scope.checkValidPincode = true;
+                            
+                            
+                        } else {
+                
+                            console.log(decodedData);
+                            var obj = checkoutService.addAddress(newAddress, decodedData._id);
+                
+                            obj.then(function (response) {
+                                console.log(response);
+                
+                                $scope.userAddress.push(newAddress);
+                                
+                                console.log($scope.newAddress);
+                                $uibModalInstance.close();
+                                // $scope.newAddress={};
+                                // formData={};
+                                growl.success("Address added successfully!", {
+                                    ttl: 3000
+                                });
+                
+                            }, function (error) {
+                                console.log(error, 'can not get data.');
+                
+                            });
+                        }    
+                };
 
-    $scope.openModal = function(){
-        $scope.modalInstance = $uibModal.open({
-        ariaLabelledBy: 'modal-title',
-        ariaDescribedBy: 'modal-body',
-        templateUrl: '/pages/modal.html',
-        controller :'ModelHandlerController',
-        scope: $scope,
-		size: 'md',
-		backdrop: 'static',
-		resolve: {
-		 payload: function () {
-			 return {
-				msg_body : 'Hello! I am payload msg',
-				title : 'Hello! Title',
-				body_title : 'UiBootstrap.net'
-             };
+                $scope.cancelModal = function() {
+                    $uibModalInstance.dismiss();
+                };
+            },
+            size: 'md',
+            // backdrop: 'static',
+            resolve: {
+            formData: function(){
+                $scope.newAddress={};
+                return $scope.newAddress;
             }
-		 }
+            }
         });
-       
-        }
-    
-    $scope.addAddress = function (newAddress) {
-        console.log(newAddress);
-        if (!$scope.newAddress.locality) {
-            $scope.checkValidLocality = true;
-            // document.getElementById("exampleModal").showModal();
-            // exampleModal.modal('show');
-            // return;
-
-        } else if (!$scope.newAddress.city) {
-            $scope.checkValidCity = true;
-            // document.getElementById("exampleModal").showModal();
-            
-        } else if (!$scope.newAddress.pincode) {
-            $scope.checkValidPincode = true;
-            // document.getElementById("exampleModal").showModal();
-            
-        } else {
-
-            console.log(decodedData);
-            var obj = checkoutService.addAddress(newAddress, decodedData._id);
-
-            obj.then(function (response) {
-                console.log(response);
-
-                $scope.userAddress.push(newAddress);
-                $scope.newAddress = null;
-
-                console.log(newAddress);
-                console.log("old", token);
-
-            }, function (error) {
-                console.log(error, 'can not get data.');
-
-            });
-
-        }
-
-    }
+      };
 
     $scope.validateForm = function () {
         console.log($scope.formData.date);
@@ -124,18 +121,22 @@ myApp.controller('checkoutController', ['$scope', '$uibModal',  'growl', 'checko
             if ($scope.formData.name == null) {
                 window.alert("Please enter valid name...");
                 return false;
-            } else if (isNaN($scope.formData.cardNumber) || $scope.formData.cardNumber == null) {
+            } 
+            else if (isNaN($scope.formData.cardNumber) || $scope.formData.cardNumber == null) {
                 window.alert("Please enter valid card number...");
                 return false;
-            } else if (isNaN($scope.formData.CVV) || $scope.formData.CVV == null) {
+            } 
+            else if (isNaN($scope.formData.date.expiryMonth) || $scope.formData.date.expiryMonth < 1 || $scope.formData.date.expiryMonth > 12) {
+                $scope.checkValidExpiryMonth = true;
+            }
+            else if (isNaN($scope.formData.date.expiryYear) || $scope.formData.date.expiryYear == null || $scope.formData.date.expiryYear < currentYear) {
+                $scope.checkValidExpiryMonth = true;
+            } 
+            else if (isNaN($scope.formData.CVV) || $scope.formData.CVV == null) {
                 window.alert("Please enter valid CVV...");
                 return false;
-            } else if (isNaN($scope.formData.date.expiryYear) || $scope.formData.date.expiryYear == null || $scope.formData.date.expiryYear < currentYear) {
-                $scope.checkValidExpiryMonth = true;
-            } else if (isNaN($scope.formData.date.expiryMonth) || $scope.formData.date.expiryMonth < 1 || $scope.formData.date.expiryMonth > 12) {
-                $scope.checkValidExpiryMonth = true;
-
-            } else {
+            } 
+            else {
                 placeOrder();
 
             }
@@ -184,17 +185,4 @@ myApp.controller('checkoutController', ['$scope', '$uibModal',  'growl', 'checko
         $scope.formData.paymentMode = paymentMode;
     }
 
-}]);
-
-myApp.controller("ModelHandlerController", ['$scope' , '$uibModalInstance', function($scope,$uibModalInstance){
- 
-    $scope.cancelModal = function(){
-    console.log("cancelmodal");
-    $uibModalInstance.dismiss('close');
-    }
-    $scope.ok = function(){
-    $uibModalInstance.close('save');
-    
-    }
-    
 }]);

@@ -4,14 +4,12 @@ myApp.controller('indexController', ['$scope', '$state', 'indexService', functio
     $scope.logoutButtonDiv = false;
     
     if(isToken){
-        $scope.logoutButtonDiv = true;
-        
+        $scope.logoutButtonDiv = true; 
     }
 
     $scope.logoutFunction = function () {
         localStorage.clear();
-        $state.go('login');
-        // $location.path('/login');
+        $state.go('login');  
     }
 
 }]);

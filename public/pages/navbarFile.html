@@ -1,13 +1,21 @@
 <html>
-    <body>
-            <nav class="navbar sticky-top navbar-light bg-dark" ng-controller="navbarController">
-                    <span class="navbar-brand mb-0 h1" style="color:white; margin-right:auto;">Food Ordering App</span>
-                    <div ng-show="logoutButtonDiv">
-                            <button type="button" style="float: right; color:white; background-color: Transparent; border: none;"
-                                class="navbar-brand mb-0 h1 btn btn-success btn-sm" ng-click="logoutFunction();">Logout</button>
-                            <!-- < "button>" ng-click="logoutFunction();" class="navbar-brand mb-0 h1"
-                           style="color:white; margin-right:auto;">Logout</span> -->
-                        </div>
-                </nav>
-    </body>
+
+<body>
+    <nav class="navbar navbar-inverse" data-spy="affix" data-offset-top="197" ng-controller="navbarController">
+        <span class="navbar-brand mb-0 h1" style="color:white; margin-right:auto;">Food Ordering App</span>
+        <div ng-show="logoutButtonDiv">
+            <button type="button" style="float: right; color:white; background-color: Transparent; border: none;"
+                class="navbar-brand mb-0 h1 btn btn-success btn-sm" ng-click="logoutFunction();">Logout</button>
+        </div>
+    </nav>
+    <!-- <nav class="navbar sticky-top navbar-light bg-dark" ng-controller="navbarController">
+                <span class="navbar-brand mb-0 h1" style="color:white; margin-right:auto;">Food Ordering App</span>
+                <div ng-show="logoutButtonDiv">
+                    <button type="button"
+                        style="float: right; color:white; background-color: Transparent; border: none;"
+                        class="navbar-brand mb-0 h1 btn btn-success btn-sm" ng-click="logoutFunction();">Logout</button>
+                </div>
+            </nav> -->
+</body>
+
 </html>
