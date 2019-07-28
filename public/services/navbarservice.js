@@ -15,6 +15,6 @@ myApp.service('navbarService', ['$http', 'growl', '$state', '$q', function ($htt
     //    $location.path('/login');
     }
 
-    console.log(this.logoutButtonDiv);
+    // console.log(this.logoutButtonDiv);
 
 }]);

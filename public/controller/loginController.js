@@ -21,12 +21,12 @@ myApp.controller('loginController', ['$scope', '$http', '$location', 'growl',  '
         } else {
 
             var obj = loginService.validateUser($scope.user);
-            console.log(obj);
+            // console.log(obj);
 
             obj.then(function (response) {
-                console.log(response, 'res');
+                // console.log(response, 'res');
                 data = response.data;
-                console.log(data);
+                // console.log(data);
                 localStorage.clear();
                 localStorage.setItem('userToken', data.token);
                 // $scope.logoutButtonDiv=true;

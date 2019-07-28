@@ -5,7 +5,7 @@
                 <div class="info-form">
                     <form class="form-inlin justify-content-center">
                             <label>Search: &nbsp</label>
-                            <input type="text" ng-model="selected" typeahead-on-select="changedValue(selected)"
+                            <input type="text" ng-model="selected" class="form-control" typeahead-on-select="changedValue(selected)"
                               placeholder="enter city here" uib-typeahead="cityname for cityname in cities | filter: $viewValue | limitTo:8" typeahead-input-formatter="formatInputField(selected)" 
                               style="padding: 0.2rem 0.2rem; width:50%; font-size: 0.75rem;" />
                             <span ng-show="selected.length>0">

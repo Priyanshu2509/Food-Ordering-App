@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Repeat last used customization? </h3>
+    <div ng-show="lastAddOnAdded.length !== 0">
+        {{foodItem.foodName}} with
+        <span ng-repeat="addOn in lastAddOnAdded">
+            {{addOn.foodName}} {{$last ? '' : ($index==lastAddOnAdded.length-2) ? ' and ' : ', '}}
+        </span>
+    </div>
+    <div ng-show="lastAddOnAdded.length === 0 ">
+        {{foodItem.foodName}}
+    </div>
+</div>
+<div class="modal-body" id="modal-body">
+    <form>
+        <div class="form-group" style="float: center">
+            <div class="form-group row">
+                <div>
+                    <button type="button" ng-click="openCustomizationModal(foodItem, null); closeModal();"
+                        class="btn btn-outline-secondary">No, Choose Again!</button>
+                    <button type="button" ng-click="repeatLastOrder(); closeModal();" class="btn btn-outline-secondary">Repeat the
+                        last customization</button>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-danger sm" type="button" ng-click="cancelModal()">Cancel</button>
+    </form>
+</div>

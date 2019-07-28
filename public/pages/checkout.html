@@ -19,70 +19,15 @@
         <h4 class="d-inline-block"><strong>Delivery Address</strong></h4>
         <button type="button" style="float: right" class="btn btn-success btn-sm" ng-click="openModal();">Add New Address
         </button>
-        <!-- <button type="button" style="float: right" class="btn btn-success btn-sm" data-toggle="modal"
-          data-target="#exampleModal">
-          Add New Address
-        </button>
-
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel"><strong>ADD NEW ADDRESS</strong> </h4>
-              </div>
-              <div class="modal-body">
-                <form>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Enter new Address here</label>
-                    <div class="form-group row">
-                      <label for="streetAddress" class="col-sm-2 col-form-label">Locality</label>
-                      <div class="col-sm-10">
-                        <input type="text" ng-model="newAddress.locality" style="width: 100%" required>
-                        <div ng-show="checkValidLocality">
-                          <h6 style="color: red">Enter valid locality</h6>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="city" class="col-sm-2 col-form-label">City</label>
-                      <div class="col-sm-10">
-                        <input type="text" ng-model="newAddress.city" style="width: 100%" required>
-                        <div ng-show="checkValidCity">
-                          <h6 style="color: red">Enter valid city</h6>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="pincode" class="col-sm-2 col-form-label">Pincode</label>
-                      <div class="col-sm-10">
-                        <input maxlength="6" ng-model="newAddress.pincode" style="width: 100%" required>
-                        <div ng-show="checkValidExpiryYear">
-                          <h6 style="color: red">Enter valid pincode</h6>
-                        </div>
-
-
-                      </div>
-                    </div>
-                    <br>
-                    <button type="button" class="btn btn-primary" ng-click="addAddress(newAddress); "
-                      data-dismiss="modal">Save</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
+       
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item" ng-repeat="address in userAddress track by $index">
           <input type="radio" ng-model="addressChosen.value" name="addressChosen" ng-value=address />
 
           <label>{{address.locality}}</label>
-          <label>, {{address.city}}</label>
-          <label>, {{address.pincode}}</label>
+          <label>{{address.city}}</label>
+          <label> {{address.pincode}}</label>
 
 
         </li>
@@ -146,7 +91,7 @@
 
     </div>
 
-    <div class="col-sm-4">
+    <div class="col-sm-4" ng-init="calculateTotalCost();">
       <div class="card">
         <div class="card-body">
           <h4 class="card-title"><strong>Cart</strong></h4>
@@ -156,23 +101,48 @@
           <div ng-hide="IsVisible">
 
             <table ng-repeat="item in cart.cartItems track by $index ">
-              <tr>
-                <td width="170px">{{ item.foodName}}</td>
+              <tr ng-show="item.customizable=='false'">
+                <td width="170px">{{item.foodName}}</td>
 
                 <td width="100px">
                   <div>
                     <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center; padding: 0;
-                                      background-color: transparent; color: green; font-weight: bold;"
-                      ng-click="addItem(item);">+</button>
+                  background-color: transparent; color: green; font-weight: bold;"
+                      ng-click="addItem(item, null);">+</button>
                     <label style="font-size:17px;">&nbsp{{item.qty}}&nbsp</label>
                     <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center;padding: 0;
-                                      background-color: transparent; color: red; font-weight: bold; "
-                      ng-click="removeItem(item);">-</button>
+                  background-color: transparent; color: red; font-weight: bold; "
+                      ng-click="removeItem(item, null);">-</button>
                   </div>
 
                 </td>
-                <td>{{item.foodPrice*item.qty | currency: "₹" }}</td>
+                <td>{{ item.foodPrice * item.qty| currency: "₹" }}</td>
               </tr>
+              <tr ng-show="item.customizable=='true'" ng-repeat-start="itemWithAddOn in item.customisation track by $index">
+
+                <td width="170px">{{item.foodName}}</td>
+            
+                <td width="100px">
+                  <div>
+                    <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center; padding: 0;
+                    background-color: transparent; color: green; font-weight: bold;"
+                      ng-click="addItem(item, itemWithAddOn.addOn);">+</button>
+                    <label style="font-size:17px;">&nbsp{{itemWithAddOn.addOnQty}}&nbsp</label>
+                    <button class="btn btn-light btn-sm" style="font-size:25px;text-align: center;padding: 0;
+                    background-color: transparent; color: red; font-weight: bold; "
+                      ng-click="removeItem(item, itemWithAddOn.addOn, 0);">-</button>
+                  </div>
+
+                </td>
+                <td>{{calculateItemWithAddOnPrice(item, itemWithAddOn.addOn) * itemWithAddOn.addOnQty  | currency: "₹" }}</td>
+                <tr ng-repeat-end>
+                    <td>
+                        <button class="btn btn-light btn-sm" style="font-size:10px;text-align: center; padding: 0;
+                        background-color: transparent; color: grey; font-weight: bold;"                         ng-click="openCustomizationModal(item, itemWithAddOn.addOn)">Customize</button>
+                    </td>
+                </tr>
+              </tr>
+              
             </table>
             <hr>
             <table>

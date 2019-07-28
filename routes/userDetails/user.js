@@ -4,17 +4,19 @@ const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
-const config = require('../config/database');
-const User = require('../models/user');
+const config = require('../../config/database');
+const User = require('./userModel');
 
 // Signup route
 router.post('/signup', (req, res, next) => {
+ 
   var newUser = new User({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     phone: req.body.phone,
-    isAdmin: req.body.isAdmin
+    isAdmin: req.body.isAdmin,
+    
   });
   User.addUser(newUser, (err, user) => {
     if (err) {

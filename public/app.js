@@ -1,13 +1,13 @@
-var myApp = angular.module('myApp', ['ngResource', 'ngRoute' , 'ngAnimate' ,  'ngSanitize', 'ui.bootstrap', 'ui.router', 'angular-growl']);
+var myApp = angular.module('myApp', ['ngResource', 'ngRoute', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.router', 'angular-growl']);
 
 myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, growlProvider) {
 
     $locationProvider.html5Mode(true);
 
-     $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/');
 
     $stateProvider
-      
+
         .state('/', {
             url: '/',
             templateUrl: 'pages/firstPage.html',
@@ -37,7 +37,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
                             url: "http://localhost:3000/api/home",
                         })
                         .then(function (response) {
-                            console.log(response.data.cities);
+                            // console.log(response.data.cities);
                             return response.data.cities;
                         }, function (error) {
                             console.log(error, 'can not get data.');
@@ -54,11 +54,8 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
                 allRestaurants: ['$http', '$stateParams', function ($http, $stateParams) {
                     return $http({
                             method: "GET",
-                            url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity,
-                            // data: {
-                            //     city: $stateParams.currentCity
-                            
-                            // }
+                            url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity
+
                         })
                         .then(function (response) {
                             // console.log(response.data.cities);
@@ -78,11 +75,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
                 restaurantInfoAndMenu: ['$http', '$stateParams', function ($http, $stateParams) {
                     return $http({
                             method: "GET",
-                            url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity + '/' + $stateParams.currentRestaurantId ,
-                            data: {
-                                city: $stateParams.currentRestaurantId,
-                                restaurantId: $stateParams.currentRestaurantId
-                            }
+                            url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity + '/' + $stateParams.currentRestaurantId,
                         })
                         .then(function (response) {
                             console.log(response.data.data);
@@ -90,6 +83,8 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
                             var menuList = menuRetrieved.category;
                             var subCategory = menuRetrieved.subCategory;
                             var foodItems = menuRetrieved.foodItems;
+                            var addOn = menuRetrieved.addOn;
+                            // console.log(addOn);
 
                             //mapping1
                             for (var i in menuList) {
@@ -124,6 +119,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
                             result.menuList = menuList;
                             result.subCategory = subCategory;
                             result.foodItems = foodItems;
+                            result.addOn = menuRetrieved.addOn;
                             //console.log(result);
                             return result;
                         }, function (error) {
@@ -135,11 +131,29 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
         })
 
         .state('checkout', {
-            url: '/checkout',
+            url: '/checkout/:currentCity/:currentRestaurantId',
             templateUrl: 'pages/checkout.html',
             controller: 'checkoutController',
             resolve: {
+                allAddOn: ['$http', '$stateParams', function ($http, $stateParams) {
+                    // console.log(city, restaurantId)
+                    return $http({
+                            method: "GET",
+                            url: "http://localhost:3000/api/allrestaurants/" + $stateParams.currentCity + '/' + $stateParams.currentRestaurantId,
+                        })
+                        .then(function (response) {
+                            // console.log(response.data.data);
+                            var menuRetrieved = (response.data.data);
+                            var addOn = menuRetrieved.addOn;
+                            // console.log(addOn)
+                            return addOn;
+                        }, function (error) {
+                            console.log(error, 'can not get data.');
+                        });
+                }],
+
                 userInfo: ['$http', function ($http) {
+
                     var token = localStorage.getItem('userToken');
                     return $http({
                             method: "POST",
@@ -159,6 +173,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
                                     });
                                 }
 
+
                                 // console.log($scope.userAddress);
                                 return decodedData;
                             }
@@ -168,8 +183,5 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, gr
                         });
                 }]
             }
-
-
         });
-
 });

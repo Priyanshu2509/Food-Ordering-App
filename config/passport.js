@@ -1,12 +1,12 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const User = require('../models/user');
-const config = require('../config/database');
+const User = require('../routes/userDetails/userModel');
+const config = require('./database');
 const passport = require('passport');
 
 module.exports =  function() {
   
-  console.log("hello Passport Auth");
+  // console.log("hello Passport Auth");
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("Authorization");
   opts.secretOrKey = config.secret;

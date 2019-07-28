@@ -1,6 +1,6 @@
 myApp.controller('navbarController', ['$scope', '$location', 'navbarService', function ($scope, $location, navbarService) {
 
-   console.log('Here at Navbar controller');
+   // console.log('Here at Navbar controller');
    var isToken = (localStorage.getItem('userToken'));
    $scope.logoutButtonDiv = false;
 

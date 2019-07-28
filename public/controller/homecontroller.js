@@ -2,10 +2,10 @@ myApp.controller('homeController', ['$scope',  '$location', '$http', 'growl', '$
     // location.reload();
     $scope.logoutButtonDiv = navbarService.checkLogoutButton();
     
-    console.log($scope.logoutButtonDiv);
+    // console.log($scope.logoutButtonDiv);
 
     $scope.cities=allCities;
-    console.log(allCities);
+    //  console.log(allCities);
 
     $scope.selected = undefined;
     $scope.selected = '';
@@ -26,21 +26,14 @@ myApp.controller('homeController', ['$scope',  '$location', '$http', 'growl', '$
 
     //validate search option for cities
     $scope.validateForm = function () {
-        console.log($scope.cityName);
+        // console.log($scope.cityName);
         if (!$scope.cityName) {
             alert('Please enter a city name!');
-
-            // growl.error("Please enter a city name!", {
-            //     ttl: 3000
-            // });
-        // $state.go('home');
-            // return;
         } else {
                 
             $stateParams.currentCity=$scope.cityName;
             $state.go('allrestaurants', { currentCity : $scope.cityName});
-            // console.log($stateParams.currentCity);
-            // return;
+            
         }
     }
 

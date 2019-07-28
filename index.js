@@ -1,16 +1,19 @@
-    const mongoose = require('mongoose');
+const mongoose = require('mongoose');
     const passport = require('passport');
-    const path = require('path');
-    
+    const path=require('path');
+    const session      = require('express-session');
+    const jwt = require('jsonwebtoken');
+    const cookieParser = require('cookie-parser');
     const bodyParser = require('body-parser');
-    
+    const bcrypt   = require('bcryptjs');
+
     const express = require('express');
     const app = express();
 
     const config = require('./config/database');
-    const users = require('./routes/user');
-    const home = require('./routes/home');
-    const allrestaurants = require('./routes/allrestaurants');
+    const users = require('./routes/userDetails/user');
+    const home = require('./routes/homeDetails');
+    const allrestaurants = require('./routes/allRestaurants');
     const orderDetails = require('./routes/orderDetails');
     require('./config/passport')(passport);
 
@@ -46,6 +49,10 @@
 
     app.use(function(req,res){
         res.sendFile(__dirname+'/public/index.html');
+    });
+
+    app.get('/', (req, res) => {
+        res.send('Invalid Endpoint');
     });
 
     const port = 3000;

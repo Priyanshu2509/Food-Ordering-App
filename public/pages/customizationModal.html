@@ -1,0 +1,46 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title"><strong>
+            ADD TO CART
+        </strong></h4>
+</div>
+<div class="modal-body" id="modal-body">
+
+    <form>
+        <div class="form-group">
+            <ul class="list-group list-group-flush" ng-repeat="addOn in mappedAddOns track by $index">
+                <li class="list-group-item">
+                    {{addOn.foodName}}
+                    <h6>{{addOn.foodPrice|currency: "₹"}}</h6>
+                    <div ng-show="getAddOnQty(addOn) == 0" style="float: right;margin-top:-40px;">
+                        <button type="button" ng-click="addAddOnFunction(addOn)"
+                            style="font-size:11px;text-align: center;" class="btn btn-success btn-sm">ADD</button>
+                    </div>
+
+                    <div ng-show="getAddOnQty(addOn) !=0" style="float: right;margin-top:-40px;">
+                        <div class="card-block text-right">
+                            <button class="btn btn-light btn-sm"
+                                style="font-size:25px;text-align: center; padding: 0; background-color: transparent; color: green; font-weight: bold;"
+                                ng-disabled="disabledBtn(addOn)" ng-click="addAddOnFunction(addOn);">+</button>
+                            <label style="font-size:17px;">&nbsp{{getAddOnQty(addOn)}}&nbsp</label>
+                            <button class="btn btn-light btn-sm"
+                                style="font-size:25px;text-align: center;padding: 0; background-color: transparent; color: red; font-weight: bold; "
+                                ng-click="removeAddOnFunction(addOn)">-</button>
+                            <!-- <p style="color:grey" ng-show="addOn.qty==addOn.maxQtyToBeAdded & disabled()">Only
+                                {{addOn.maxQtyToBeAdded}} could be added.</p> -->
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <span>
+                <h4><strong>Total : {{billInModalBox}}</strong> </h4>
+            </span>
+
+            <br>
+
+
+            <button type="button" class="btn btn-primary" ng-click="ok();" data-dismiss="modal">Add</button>
+            <button class="btn btn-warning" type="button" ng-click="cancelModal()">Cancel</button>
+        </div>
+    </form>
+</div>
